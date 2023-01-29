@@ -1,0 +1,2 @@
+* text=auto
+*.pack filter=lfs diff=lfs merge=lfs -text

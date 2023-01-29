@@ -1,0 +1,55 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+.Toastify__toast-theme--dark {
+  background-color: #00000076 !important;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  
+}
+
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(
+    #009688 0%,
+    #009688 130px,
+    #d9dbd5 130px,
+    #d9dbd5 100%
+  );
+  overflow: hidden;
+}
+
+.register, .login{
+  font-family: 'Poppins', sans-serif;
+}
+
+.chat-box{
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.chat-messages{
+  position: absolute;
+  flex: 70%;
+  /* background: url("assets/pattern.png"); */
+  background-color: #e5ddd5;
+  background-size: 30% 100%;
+  background-repeat: repeat;
+}
+/* .chat-messages::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("assets/pattern.png");
+  opacity: 0.06;
+} */
