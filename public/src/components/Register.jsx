@@ -4,15 +4,16 @@ import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
 import { RxPerson, RxEyeOpen, RxEyeClosed } from "react-icons/rx";
 import { MdOutlineAddAPhoto } from "react-icons/md";
-import { FiMail, FiLock } from "react-icons/fi";
+import { FiMail, FiLock, FiUnlock } from "react-icons/fi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { registerRoute } from "../utils/APIRoutes";
 
-function Register() {
+function Register({isLoginActive}) {
   const navigate = useNavigate();
   const [show, setShow] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
+  const [isActive, setIsActive] = useState('not-active');
 
   //styles for error notification
   const toastOptions = {
@@ -47,6 +48,7 @@ function Register() {
   //setting an image value
   const imageUpload = (event) => {
     setValues({ ...values, profilePic: event.target.files[0] });
+    setIsActive('active');
   };
 
   //validation for incoming data
@@ -115,8 +117,7 @@ function Register() {
 
   return (
     <>
-      <FormContainer>
-        <div className="register">
+      <FormContainer className="form-container">
           <form className="form signup" onSubmit={(event) => handleSubmit(event)}>
             <span className="title">Registration</span>
             <div className="input-field">
@@ -144,7 +145,7 @@ function Register() {
                 name="password"
                 onChange={(e) => handleChange(e)}
               />
-              <FiLock />
+              <FiUnlock />
               <RxEyeOpen 
               className={`${show ? "password-icon" : "none"}`}
               onClick={()=>{setShow(false)}}
@@ -177,6 +178,7 @@ function Register() {
                 type="file"
                 name="profilePic"
                 accept="image/*"
+                className={`${isActive === 'active' ? 'active' : ''}`}
                 onChange={(e) => imageUpload(e)}
               />
               <MdOutlineAddAPhoto />
@@ -187,11 +189,10 @@ function Register() {
             </div>
             <div className="login-signup">
               <span className="text">
-                Already have an account ? <Link to="/login" className="text login-link">Login Now</Link>
+                Already have an account ? <button onClick={() => isLoginActive('yes')} className="login-link">Login Now</button>
               </span>
             </div>
           </form>
-        </div>
       </FormContainer>
       <ToastContainer />
     </>
@@ -200,147 +201,7 @@ function Register() {
 
 //declaring FormContainer as a div and setting styles
 const FormContainer = styled.div`
-  position: relative;
-  min-width: 430px;
-  width: 100%;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  margin: 0 20px;
-
-  .register{
-    display: flex;
-    align-items: center;
-    width: 200%;
-    transition: height 0.2s ease;
-
-    .form {
-      width: 50%;
-      padding: 30px;
-      background-color: #fff;
-      transition: margin-left 0.18s ease;
-
-      .title{
-        position: relative;
-        font-size: 27px;
-        font-weight: 600;
-
-        &::before{
-          content: '';
-          position: absolute;
-          left: 0;
-          bottom: 0;
-          height: 3px;
-          width: 30px;
-          background-color: #009688;
-          border-radius: 25px;
-        }
-      }
-
-      .input-field{
-        position: relative;
-        height: 50px;
-        width: 100%;
-        margin-top: 30px;
-
-        input{
-          position: absolute;
-          height: 100%;
-          width: 100%;
-          padding: 0 35px;
-          border: none;
-          outline: none;
-          font-size: 16px;
-          border-bottom: 2px solid #ccc;
-          border-top: 2px solid transparent;
-          transition: all 0.2s ease;
-
-          &:focus{
-            border-bottom-color: #009688;
-          }
-          &:focus ~ svg{
-            color: #009688;
-          }
-          &:not(:placeholder-shown){
-            border-bottom-color: #009688;
-
-            & ~ svg{
-              color: #009688;
-            }
-          }
-
-          &[type="file" i]{
-            color: #747474;
-            padding-top: 4%;
-            border-bottom-color: #ccc;
-
-            &::-webkit-file-upload-button{
-              display:none;
-            }
-            &:focus{
-              color: #009688;
-              border-bottom-color: #009688;
-            }
-            
-          }
-        }
-        svg {
-          position: absolute;
-          top: 50%;
-          left: 0;
-          transform: translateY(-50%);
-          color: #999;
-          font-size: 23px;
-          transition: all 0.2s ease;
-        }
-
-        .password-icon{
-          left: 90%;
-        }
-
-        .none{
-          display: none;
-        }
-      }
-      .button{
-        margin-top: 35px;
-        width: 100%;
-        border: none;
-        color: #fff;
-        font-size: 17px;
-        font-weight: 500;
-        letter-spacing: 1px;
-        border-radius: 6px;
-        background-color: #009688;
-        cursor: pointer;
-        transition: all 0.3s ease;
-
-        &:hover{
-          background-color: #265df2;
-        }
-      }
-
-      .text{
-        color: #333;
-        font-size: 14px;
-
-        a{
-          color: #009688;
-          text-decoration: none;
-
-          &:hover{
-            text-decoration: underline;
-          }
-        }
-      }
-
-      .login-signup{
-        margin-top: 30px;
-        text-align: center;
-      }
-    }
-  }
+align-items: center;
 `;
 
 export default Register;

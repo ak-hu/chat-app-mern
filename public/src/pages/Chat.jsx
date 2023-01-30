@@ -22,8 +22,6 @@ function Chat() {
   const [navState, setNavState] = useState("start");
 
   const [fetchAgain, setFetchAgain] = useState(false);
-
-
   const [searchResults, setSearchResult] = useState([]);
   const [search, setSearch] = useState('');
   const {
@@ -39,7 +37,6 @@ function Chat() {
     draggable: true,
     theme: "dark",
   };
-
   // search function
   const handleSearch = async (event) => {
     event.preventDefault();

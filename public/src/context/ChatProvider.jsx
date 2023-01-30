@@ -12,17 +12,12 @@ const ChatProvider = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userInfo = async () => {
-      // check if the user loged in
-      if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
-        setUser(
-          await JSON.parse(
-            localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
-          )
-        );
-      }
-    }; userInfo();
-  }, []);
+    const userInfo = JSON.parse(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY));
+    setUser(userInfo);
+
+    if (!userInfo) navigate("/auth");
+  }, [navigate]);
+
 
   return (
     <ChatContext.Provider

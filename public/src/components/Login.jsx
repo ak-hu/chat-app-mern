@@ -8,7 +8,7 @@ import axios from "axios";
 import styled from "styled-components";
 import { loginRoute } from "../utils/APIRoutes";
 
-function Login() {
+function Login({isActive}) {
   const navigate = useNavigate();
 
   //creating useState hook and setting empty values into it
@@ -77,20 +77,17 @@ function Login() {
             process.env.REACT_APP_LOCALHOST_KEY,
             JSON.stringify(data)
           );
-
           navigate("/");
         }
       } catch (error) {
-        toast.error("Error Occured!", toastOptions);
+        toast.error(error.response.data.msg, toastOptions);
       };
     };
   }
 
   return (
     <>
-      <FormContainer>
-        <div className="login">
-
+      <FormContainer className="form-container">
           <form className="form login" action="" onSubmit={(event) => handleSubmit(event)}>
             <span className="title">Login</span>
             <div className="input-field">
@@ -125,11 +122,10 @@ function Login() {
             </div>
             <div className="login-signup">
               <span className="text">
-                Don't have an account ? <Link to="/register">Create One.</Link>
+                Don't have an account ? <button onClick={() => isActive('no')} className="login-link">Create One</button>
               </span>
             </div>
           </form>
-        </div>
       </FormContainer>
       <ToastContainer />
     </>
@@ -137,132 +133,7 @@ function Login() {
 }
 
 const FormContainer = styled.div`
-position: relative;
-min-width: 430px;
-width: 100%;
-background: #fff;
-border-radius: 10px;
-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-overflow: hidden;
-margin: 0 20px;
-
-.login{
-  display: flex;
-  flex-direction: column;
-  width: 200%;
-  transition: height 0.2s ease;
-
-  .form {
-    width: 50%;
-    padding: 30px;
-    background-color: #fff;
-    transition: margin-left 0.18s ease;
-
-    .title{
-      position: relative;
-      font-size: 27px;
-      font-weight: 600;
-
-      &::before{
-        content: '';
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        height: 3px;
-        width: 30px;
-        background-color: #009688;
-        border-radius: 25px;
-      }
-    }
-
-    .input-field{
-      position: relative;
-      height: 50px;
-      width: 100%;
-      margin-top: 30px;
-
-      input{
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        padding: 0 35px;
-        border: none;
-        outline: none;
-        font-size: 16px;
-        border-bottom: 2px solid #ccc;
-        border-top: 2px solid transparent;
-        transition: all 0.2s ease;
-
-        &:focus{
-          border-bottom-color: #009688;
-        }
-        &:focus ~ svg{
-          color: #009688;
-        }
-        &:not(:placeholder-shown){
-          border-bottom-color: #009688;
-
-          & ~ svg{
-            color: #009688;
-          }
-        }
-      }
-      svg {
-        position: absolute;
-        top: 50%;
-        left: 0;
-        transform: translateY(-50%);
-        color: #999;
-        font-size: 23px;
-        transition: all 0.2s ease;
-      }
-
-      .password-icon{
-        left: 90%;
-      }
-
-      .none{
-        display: none;
-      }
-    }
-    .button{
-      margin-top: 35px;
-      width: 100%;
-      border: none;
-      color: #fff;
-      font-size: 17px;
-      font-weight: 500;
-      letter-spacing: 1px;
-      border-radius: 6px;
-      background-color: #009688;
-      cursor: pointer;
-      transition: all 0.3s ease;
-
-      &:hover{
-        background-color: #265df2;
-      }
-    }
-
-    .text{
-      color: #333;
-      font-size: 14px;
-
-      a{
-        color: #009688;
-        text-decoration: none;
-
-        &:hover{
-          text-decoration: underline;
-        }
-      }
-    }
-
-    .login-signup{
-      margin-top: 30px;
-      text-align: center;
-    }
-  }
-}
+flex-direction: column;
 `;
 
 export default Login;

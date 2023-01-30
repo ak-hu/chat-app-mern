@@ -19,6 +19,7 @@ function SingleChat({ fetchAgain, socket, setFetchAgain, selectedChat }) {
     const [newMessage, setNewMessage] = useState("");
     const [socketConnected, setSocketConnected] = useState(false);
     const [typing, setTyping] = useState(false);
+    const [isTyping, setIsTyping] = useState(false);
 
     const { user } = ChatState();
 
