@@ -11,3 +11,4 @@ export const groupChatRoute = `${host}/api/chats/group`;
 export const renameGroupChatRoute = `${host}/api/chats/rename`;
 export const removeGroupChatRoute = `${host}/api/chats/groupremove`;
 export const addGroupChatRoute = `${host}/api/chats/groupadd`;
+export const updateGroupPicChatRoute = `${host}/api/chats/grouppic`;

@@ -26,6 +26,11 @@ const userSchema = new mongoose.Schema({
     profilePic: {
         type: String,
     },
+    isAdmin: {
+        type: Boolean,
+        required: true,
+        default: false,
+      },
 });
 
 module.exports = mongoose.model("User", userSchema);

@@ -1,14 +1,13 @@
-import React from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import styled from "styled-components";
 import "react-toastify/dist/ReactToastify.css";
-import { accessChatRoute } from "../utils/APIRoutes";
 
-import { ChatState } from "../context/ChatProvider";
+import { accessChatRoute } from "../../utils/APIRoutes";
+import { ChatState } from "../../context/ChatProvider";
 
-function SideDrawer({ searchResults }) {
+function Search({ searchResults }) {
   const setCurrentChat = useState(undefined);
 
   const {
@@ -21,7 +20,6 @@ function SideDrawer({ searchResults }) {
   const handleChatChange = (chat) => {
     setCurrentChat(chat);
   };
-
 
   //styles for error notification
   const toastOptions = {
@@ -124,6 +122,7 @@ const Container = styled.div`
     img {
       border-radius: 100%;
       height: 3rem;
+      width: 3rem;
       max-inline-size: 100%;
     }
     h4 {
@@ -138,4 +137,4 @@ const Container = styled.div`
   height: 30rem;
 }
 `;
-export default SideDrawer;
+export default Search;

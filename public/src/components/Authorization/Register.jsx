@@ -7,7 +7,7 @@ import { MdOutlineAddAPhoto } from "react-icons/md";
 import { FiMail, FiLock, FiUnlock } from "react-icons/fi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { registerRoute } from "../utils/APIRoutes";
+import { registerRoute } from "../../utils/APIRoutes";
 
 function Register({isLoginActive}) {
   const navigate = useNavigate();

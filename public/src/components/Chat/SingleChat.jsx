@@ -1,17 +1,15 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import ChatInput from "./ChatInput";
-import { v4 as uuidv4 } from "uuid";
+import ChatInput from "../Group/ChatInput";
 import axios from "axios";
-import { ChatState } from "../context/ChatProvider";
+import { ChatState } from "../../context/ChatProvider";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
-import { host, recieveMessageRoute, sendMessageRoute } from "../utils/APIRoutes";
-
-import animationData from "../assets/typing.json";
+import { recieveMessageRoute, sendMessageRoute } from "../../utils/APIRoutes";
+import { isGroupRecieved, isAnotherSender, isLastMessage } from "../../config/ChatLogics";
+import animationData from "../../assets/typing.json";
 
 var selectedChatCompare;
-
 
 function SingleChat({ fetchAgain, socket, setFetchAgain, selectedChat }) {
     const [messages, setMessages] = useState([]);
@@ -31,16 +29,6 @@ function SingleChat({ fetchAgain, socket, setFetchAgain, selectedChat }) {
         draggable: true,
         theme: "dark",
     };
-
-    const defaultOptions = {
-        loop: true,
-        autoplay: true,
-        animationData: animationData,
-        rendererSettings: {
-            preserveAspectRatio: "xMidYMid slice",
-        },
-    };
-
 
     const fetchMessages = async () => {
         if (!selectedChat) return;
@@ -107,42 +95,53 @@ function SingleChat({ fetchAgain, socket, setFetchAgain, selectedChat }) {
         selectedChatCompare = selectedChat;
     }, [selectedChat]);
 
-    const typingHandler = (e) => {
-        setNewMessage(e.target.value);
-
-        if (!socketConnected) return;
-
-        if (!typing) {
-            setTyping(true);
-            socket.emit("typing", selectedChat._id);
-        }
-        let lastTypingTime = new Date().getTime();
-        var timerLength = 3000;
-        setTimeout(() => {
-            var timeNow = new Date().getTime();
-            var timeDiff = timeNow - lastTypingTime;
-            if (timeDiff >= timerLength && typing) {
-                socket.emit("stop typing", selectedChat._id);
-                setTyping(false);
-            }
-        }, timerLength);
-    };
-
+    let counter_sended = 0;
     return (
         <>
             <Container>
                 <div className="chat-messages">
                     {messages.map((message, i) => {
                         return (
-                            <div key={message._id} className="bg">
-                                <div
-                                    className={`message ${message.sender._id === user._id ? "sended" : "recieved"
-                                        }`}>
-                                    <div className="content ">
-                                        <p>{message.content}</p>
-                                        <p className="time">{message.createdAt.split('.')[0].split('T')[1].split(':', 2).join(':')}</p>
-                                    </div>
+                            <div key={message._id}
+                                className={`message
+                                    ${isGroupRecieved(message, selectedChat, user._id) ? "recieved-group" : ""} 
+                                    ${isAnotherSender(message, user._id)
+                                        ? (isLastMessage(messages, message, i, user._id)
+                                            ? "recieved"
+                                            : "recieved margin-10")
+                                        : ("sended")}`}>
 
+                                <div className={`${isGroupRecieved(message, selectedChat, user._id) ? 'sender-pic' : ''}`}>
+                                    {isLastMessage(messages, message, i, user._id)
+                                        ? (<img src={process.env.REACT_APP_PROFILE_PICS_PATHS + message.sender.profilePic}
+                                            alt={message.sender.username} />)
+                                        : (<></>)
+                                    }
+                                </div>
+                                <div className="content">
+                                    {isLastMessage(messages, message, i, user._id)
+                                        ? (<div className="sender-username">
+                                            <a>{message.sender.username}</a>
+                                        </div>)
+                                        : (<div></div>)
+                                    }
+                                    {isAnotherSender(message, user._id)
+                                        ? (<p className={`${isLastMessage(messages, message, i, user._id) ? 'triangle' : ''}`}>
+                                            {message.content}
+                                        </p>)
+                                        : (<>
+                                            <span id={counter_sended++}></span>
+                                            <p className={`${counter_sended === 1 ? 'triangle' : ''}`}>
+                                                {message.content}
+                                            </p>
+                                        </>)
+                                    }
+                                    <span className="time">
+                                        {message.createdAt.split('.')[0]
+                                            .split('T')[1]
+                                            .split(':', 2)
+                                            .join(':')}
+                                    </span>
                                 </div>
                             </div>
                         );
@@ -160,56 +159,68 @@ const Container = styled.div`
   grid-template-rows: 90% 10%;
   overflow: hidden;
   @media screen and (min-width: 720px) and (max-width: 1080px) {
-    grid-template-rows: 15% 70% 15%;
+    grid-template-rows: 85% 15%;
   }
   p{
     color: #000;
   }
-  .time{
-    margin-top: 5px;
-    text-align: right;
-    font-size: 0.7rem;
-  opacity: 0.5;
-  }
+
   .chat-messages {
     position: relative;
-    padding: 1rem 2rem;
     display: flex;
+    padding: 1rem;
+    gap: 0.5rem;
     flex-direction: column;
-    gap: 1rem;
     overflow: auto;
     &::-webkit-scrollbar {
-      width: 0.2rem;
+      width: 0;
+
       &-thumb {
         background-color: #ffffff39;
         width: 0.1rem;
         border-radius: 1rem;
       }
     }
+    .margin-10{
+        margin-top: -10px;
+    }
     .message {
       position: relative;
       display: flex;
       align-items: center;
+      transition: all 1s ease;
       .content {
-        max-width: 40%;
+        max-width: 60%;
         overflow-wrap: break-word;
         padding: 0.8rem;
-        font-size: 1.1rem;
+        font-size: 0.9rem;
         border-radius: 0.7rem;
         @media screen and (min-width: 720px) and (max-width: 1080px) {
           max-width: 70%;
         }
       }
+      .sender-pic{
+        width: 1.5rem;
+        height: 1.5rem;
+
+        img{
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 100%;
+        }
+      }
     }
     .sended {
-      justify-content: flex-end;
+        justify-content: flex-end;
         .content{
             background: #dcf8c8;
-            p::before {
+            margin-top: 5px;
+            
+            .triangle::before {
                 content: "";
                 position: absolute;
-                top: 0;
-                right: -12px;
+                top: 8%;
+                right: -1.1%;
                 width: 20px;
                 height: 20px;
                 background: linear-gradient(
@@ -219,20 +230,25 @@ const Container = styled.div`
                     transparent 50%,
                     transparent
                 );
+            
             }
         }
     }
-    .recieved {
-      justify-content: flex-start;
-      .content {
-        background: #fff;
-        p{
+    .recieved{
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 0.5rem;
+
+        & + &{
+            gap: 0.2rem;
+        }
+        .content {
             background: #fff;
-            &::before{
+            .triangle::before{
                 content: "";
                 position: absolute;
                 top: 0;
-                left: -12px;
+                left: 0.65%;
                 width: 20px;
                 height: 20px;
                 background: linear-gradient(
@@ -245,8 +261,50 @@ const Container = styled.div`
             }
         }
 
-      }
     }
+    .recieved-group {
+        justify-content: flex-start;
+        gap: 1.2rem;
+        align-items: flex-start;
+      .content {
+        margin-top: 0.4rem;
+        background: #fff;
+        
+        p{
+            margin-bottom: 5px;
+        }
+            .triangle::before{
+                content: "";
+                position: absolute;
+                top: 0.4rem;
+                left: 2.1rem;
+                width: 20px;
+                height: 20px;
+                background: linear-gradient(
+                    225deg,
+                    #fff 0%,
+                    #fff 50%,
+                    transparent 50%,
+                    transparent
+                );
+            }
+            .sender-username{
+                margin-bottom: 5px;
+                font-weight: 550;
+
+                a{
+                    color: #009688;
+                }
+            }
+        }
+    }
+    .time{
+        width: 30px;
+        display: block;
+        text-align: left;
+        font-size: 0.7rem;
+        opacity: 0.5;
+      }
   }
 `;
 

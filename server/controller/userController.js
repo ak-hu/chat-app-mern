@@ -35,6 +35,7 @@ module.exports.register = async (req, res, next) => {
                 username: user.username,
                 email: user.email,
                 profilePic: user.profilePic,
+                isAdmin: user.isAdmin,
                 token: generateToken(user._id),
             }
         });
@@ -63,6 +64,7 @@ module.exports.login = async (req, res, next) => {
                 username: user.username,
                 email: user.email,
                 profilePic: user.profilePic,
+                isAdmin: user.isAdmin,
                 token: generateToken(user._id),
                 status: true,
             });
@@ -79,7 +81,6 @@ module.exports.getAllUsers = async (req, res, next) => {
         const keyword = req.query.search
             ? {
                 username: { $regex: req.query.search, $options: "i" }
-
             }
             : {};
         const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });

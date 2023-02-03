@@ -1,33 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import styled from "styled-components";
-import Login from '../components/Login';
-import Register from '../components/Register';
+import Login from '../components/Authorization/Login';
+import Register from '../components/Authorization/Register';
 
 function Authorization(props) {
-    const navigate = useNavigate();
-    const [isLoginActive, setIsLoginActive] = useState('yes');
+  const navigate = useNavigate();
+  const [isLoginActive, setIsLoginActive] = useState('yes');
 
-    useEffect(() => {
-        const user = JSON.parse(localStorage.getItem("userInfo"));
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("userInfo"));
 
-        if (user) navigate("/");
-    }, [navigate]);
+    if (user) navigate("/");
+  }, [navigate]);
 
-    return (
-        <>
-            <Container>
-                {isLoginActive === 'yes' 
-                ? <Login isActive={setIsLoginActive} /> 
-                : <Register isLoginActive={setIsLoginActive} />
-                }
-            </Container>
-            <ToastContainer />
-        </>
-    );
+  return (
+    <>
+      <Container>
+        {isLoginActive === 'yes'
+          ? <Login isActive={setIsLoginActive} />
+          : <Register isLoginActive={setIsLoginActive} />
+        }
+      </Container>
+      <ToastContainer />
+    </>
+  );
 }
 const Container = styled.div`
   position: relative;
@@ -143,23 +143,7 @@ const Container = styled.div`
             display: none;
           }
         }
-        .button{
-          margin-top: 35px;
-          width: 100%;
-          border: none;
-          color: #fff;
-          font-size: 17px;
-          font-weight: 500;
-          letter-spacing: 1px;
-          border-radius: 6px;
-          background-color: #009688;
-          cursor: pointer;
-          transition: all 0.3s ease;
-  
-          &:hover{
-            background-color: #265df2;
-          }
-        }
+
   
         .text{
           color: #333;

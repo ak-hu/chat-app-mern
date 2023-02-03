@@ -35,14 +35,13 @@ const accessChat = asyncHandler(async (req, res) => {
 
   //const username = user2_id._id; think about it because the data will be dymanic
 
-  console.log(username);
-
   if (isChat.length > 0) {
     res.send(isChat[0]);
   } else {
     var chatData = {
       chatName: `${username}`,
       isGroupChat: false,
+      groupPic: '',
       users: [req.user._id, userId],
     };
 
@@ -83,25 +82,29 @@ const fetchChats = asyncHandler(async (req, res) => {
 });
 
 const createGroupChat = asyncHandler(async (req, res) => {
-  if (!req.body.users || !req.body.username) {
+  if (!req.body.users || !req.body.name) {
     return res.status(400).send({ message: "Please Fill all the feilds" });
   }
+  const groupPicUrl = 'default-group.svg';
 
   var users = JSON.parse(req.body.users);
 
-  if (users.length < 2) {
+  if (users.length < 1) {
     return res
       .status(400)
-      .send("More than 2 users are required to form a group chat");
+      .send("More than 1 user are required to form a group chat");
   }
 
   users.push(req.user);
 
+  console.log('here works')
+
   try {
     const groupChat = await Chat.create({
-      chatName: req.body.username,
+      chatName: req.body.name,
       users: users,
       isGroupChat: true,
+      groupPic: groupPicUrl,
       groupAdmin: req.user,
     });
 
@@ -134,6 +137,32 @@ const renameGroup = asyncHandler(async (req, res) => {
     .populate("users", "-password")
     .populate("groupAdmin", "-password");
 
+  if (!updatedChat) {
+    res.status(404);
+    throw new Error("Chat Not Found");
+  } else {
+    res.json(updatedChat);
+  }
+});
+
+// @desc    Rename Group
+// @route   PUT /api/chat/rename
+// @access  Protected
+const groupPicUpdate = asyncHandler(async (req, res) => {
+  const { chatId, groupPic } = req.body;
+  const profilePicUrl = (req.file) ? req.file.filename : 'default.svg';
+
+  const updatedChat = await Chat.findByIdAndUpdate(
+    chatId,
+    {
+      groupPic: profilePicUrl,
+    },
+    {
+      new: true,
+    }
+  )
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password");
   if (!updatedChat) {
     res.status(404);
     throw new Error("Chat Not Found");
@@ -205,5 +234,6 @@ module.exports = {
   createGroupChat,
   renameGroup,
   removeFromGroup,
-  addToGroup
+  addToGroup,
+  groupPicUpdate
 }

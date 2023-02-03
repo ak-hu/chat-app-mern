@@ -6,7 +6,7 @@ import { RxPerson, RxEyeOpen, RxEyeClosed } from "react-icons/rx";
 import { FiLock } from "react-icons/fi";
 import axios from "axios";
 import styled from "styled-components";
-import { loginRoute } from "../utils/APIRoutes";
+import { loginRoute } from "../../utils/APIRoutes";
 
 function Login({isActive}) {
   const navigate = useNavigate();

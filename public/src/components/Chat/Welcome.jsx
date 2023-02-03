@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
-import Robot from "../assets/robot.gif";
+import Robot from "../../assets/robot.gif";
 
 
-function Welcome(props) {
+function Welcome() {
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
@@ -17,7 +17,7 @@ function Welcome(props) {
   }, []);
   return (
     <Container>
-      <img src={Robot} alt="" />
+      <img src={Robot} alt="Robot waves his palm" />
       <h1>
         Welcome, <span>{userName}!</span>
       </h1>

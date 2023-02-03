@@ -6,8 +6,6 @@ const userRoutes = require('./routes/userRoutes');
 const messageRoutes = require('./routes/messagesRoute');
 const chatRoutes = require('./routes/chatRoutes');
 const socket = require("socket.io");
-const multer = require('multer');
-const { register } = require("./controller/userController");
 
 const app = express();
 require("dotenv").config();
@@ -15,23 +13,6 @@ require("dotenv").config();
 app.use(cors());
 app.use(express.json());
 
-//register route 
-//saving profile pictures using multer
-const storage = multer.diskStorage({
-    //setting destination to save pics
-    destination: function (req, file, cb) {
-        cb(null, 'profile_pictures')
-    },
-    //creating name for pics
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '_' + file.originalname)
-    }
-})
-
-const upload = multer({ storage: storage });
-
-// register route with saving picture
-app.post("/api/auth/register", upload.single('profilePic'), register);
 app.use('/profile_pictures', express.static('profile_pictures'));
 
 //connecting routes

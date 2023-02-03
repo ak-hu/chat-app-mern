@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import { SlMagnifier } from "react-icons/sl";
 import { IoIosArrowBack } from "react-icons/io";
+import { GrFormClose } from "react-icons/gr";
 import { io } from "socket.io-client";
 
 import axios from "axios";
@@ -11,11 +12,12 @@ import styled from "styled-components";
 import { ChatState } from "../context/ChatProvider";
 import { allUsersRoute, host } from "../utils/APIRoutes";
 
-import ChatContainer from "../components/ChatContainer";
-import Contacts from "../components/Contacts";
-import Welcome from "../components/Welcome";
-import Search from "../components/Search";
-import UserInfo from "../components/UserInfo";
+import ChatContainer from "../components/Chat/ChatContainer";
+import Contacts from "../components/Chat/Contacts";
+import Welcome from "../components/Chat/Welcome";
+import Search from "../components/Chat/Search";
+import UserInfo from "../components/Chat/UserInfo";
+
 
 function Chat() {
   const socket = useRef();
@@ -24,6 +26,8 @@ function Chat() {
   const [fetchAgain, setFetchAgain] = useState(false);
   const [searchResults, setSearchResult] = useState([]);
   const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [modalActive, setModalActive] = useState('not');
   const {
     selectedChat,
     user,
@@ -40,11 +44,12 @@ function Chat() {
   // search function
   const handleSearch = async (event) => {
     event.preventDefault();
-    if (!search) {
+    if (search === '') {
       toast.error("Please Enter something in search", toastOptions);
       return;
     }
     try {
+      setLoading(true);
       const config = {
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -53,6 +58,7 @@ function Chat() {
 
       const getUsers = async () => {
         const { data } = await axios.get(`${allUsersRoute}?search=${search}`, config);
+        setLoading(false);
         setSearchResult(data);
       };
       getUsers();
@@ -73,9 +79,9 @@ function Chat() {
 
   return (
     <>
-      <Container>
+      <Container >
         {user &&
-          <div className="container chat-box">
+          <div className={`container chat-box`}>
             <div className="aside">
               <UserInfo />
               <div className="wrapper">
@@ -91,11 +97,14 @@ function Chat() {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                   />
+                  {search !== ''
+                    ? <button className="right-button" onClick={() => { setSearch("") }}><GrFormClose /></button>
+                    : <></>}
                 </form>
                 <div className="contacts-container">
-                  {navState === 'start' ? (
+                  {search === "" || navState === 'start' ? (
                     <div>
-                      <Contacts selectedChat={selectedChat} fetchAgain={fetchAgain} />
+                      <Contacts selectedChat={selectedChat} fetchAgain={fetchAgain} setModalActive={setModalActive} modalActive={modalActive} />
                     </div>
                   ) : (
                     <Search searchResults={searchResults} />
@@ -108,8 +117,10 @@ function Chat() {
             ) : (
               <ChatContainer fetchAgain={fetchAgain} socket={socket} setFetchAgain={setFetchAgain} />
             )}
+
           </div>
         }
+
       </Container>
       <ToastContainer />
     </>
@@ -167,6 +178,15 @@ const Container = styled.div`
         border: none;
         color: #bbb;
       }
+      .right-button{
+        left: 85%;
+        top: 1.2rem;
+        
+        svg{
+          font-size: 1.4rem !important;
+        }
+
+      }
 
         input {
           width: 100%;
@@ -208,6 +228,7 @@ const Container = styled.div`
       }
     }
   }
+}
 `;
 
 export default Chat;
