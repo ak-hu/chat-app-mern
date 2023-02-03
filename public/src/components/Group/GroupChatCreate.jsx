@@ -179,8 +179,6 @@ const Container = styled.div`
         justify-content: center;
         align-items: center;
         padding: 1.8rem 0 0.2rem 0;
-
-
         background: #fff;
         border-radius: 10px;
         box-shadow: 0 20px 20px rgba(0, 0, 0, 0.1);
@@ -209,9 +207,11 @@ const Container = styled.div`
                 margin-top: 2rem;
                 height: 40px;
                 width: 100%;
+
                 & + .modal-input{
                     margin-top: 2rem;
                 }
+
                 input{
                     padding: 0 35px;
                     height: 90%;
@@ -224,11 +224,11 @@ const Container = styled.div`
                     transition: all 0.2s ease;
           
                     &:focus{
-                      border-bottom-color: #009688;
+                        border-bottom-color: #009688;
         
-                      & ~ svg{
-                        color: #009688;
-                      }
+                        & ~ svg{
+                            color: #009688;
+                        }
                     }
                 }
                 svg {

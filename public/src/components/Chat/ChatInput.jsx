@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import Picker from "emoji-picker-react";
 import { BsEmojiSmile } from "react-icons/bs";
 import { IoMdSend } from "react-icons/io";
 import styled from "styled-components";
-import Picker from "emoji-picker-react";
-
 
 export default function ChatInput({ handleSendMsg }) {
   const [msg, setMsg] = useState("");
@@ -37,7 +36,7 @@ export default function ChatInput({ handleSendMsg }) {
       <form className="input-container" onSubmit={(event) => sendChat(event)}>
         <input
           type="text"
-          placeholder="type your message here"
+          placeholder="Type your message here"
           onChange={(e) => setMsg(e.target.value)}
           value={msg}
         />
@@ -115,7 +114,7 @@ const Container = styled.div`
       color: #000;
       border: none;
       padding-left: 1rem;
-      font-size: 1.2rem;
+      font-size: 1rem;
 
       &::selection {
         background-color: #9a86f3;

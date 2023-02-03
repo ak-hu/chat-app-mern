@@ -46,7 +46,8 @@ export const getSenderFull = (loggedUser, users) => {
 
 
 export const isLastMessage = (messages, message, i, userId) => {
-  return i === 0 ||
+  return (message.sender._id !== userId &&
+    i === 0) ||
     (message.sender._id !== userId &&
       messages[i - 1].sender._id !== message.sender._id)
 };

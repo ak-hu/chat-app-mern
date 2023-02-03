@@ -14,21 +14,21 @@ function UserBage({ user, handleFunction, admin }) {
     );
 }
 const Container = styled.div`
-background-color: #e5ddd5;
-        padding: 5px 10px;
-        border-radius: 5px;
-        display: flex;
-        gap: 0.5rem;
+    background-color: #e5ddd5;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: flex;
+    gap: 0.5rem;
 
-        button{
-            border: none;
-            background: transparent;
-            text-align: center;
-            font-size: 1rem;
-            width: 1rem;
-            height: 1rem;
-            cursor: pointer;
-        }
+    button{
+        border: none;
+        background: transparent;
+        text-align: center;
+        font-size: 1rem;
+        width: 1rem;
+        height: 1rem;
+        cursor: pointer;
+    }
 `;
 
 export default UserBage;

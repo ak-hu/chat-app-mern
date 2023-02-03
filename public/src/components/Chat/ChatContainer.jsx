@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { RxExit, RxPencil2 } from "react-icons/rx";
 import { GoKebabVertical } from "react-icons/go";
@@ -8,7 +8,7 @@ import { ChatState } from "../../context/ChatProvider";
 import { getSender, getSenderProfilePic } from "../../config/ChatLogics";
 
 import UpdateGroupChat from "../Group/UpdateGroupChat";
-import SubmitModal from "../SubmitModal";
+import LeaveChat from "../Group/LeaveChat";
 import SingleChat from "./SingleChat";
 
 export default function ChatContainer({ socket, fetchAgain, setFetchAgain }) {
@@ -74,7 +74,7 @@ export default function ChatContainer({ socket, fetchAgain, setFetchAgain }) {
         : <></>
       }
       {modalSubmitActive === "active"
-        ? <SubmitModal fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} setModalActive={setModalSubmitActive} />
+        ? <LeaveChat fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} setModalActive={setModalSubmitActive} />
         : <></>
       }
     </Container >

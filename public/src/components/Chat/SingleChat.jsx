@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react";
-import styled from "styled-components";
-import ChatInput from "../Group/ChatInput";
-import axios from "axios";
-import { ChatState } from "../../context/ChatProvider";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
+
+import axios from "axios";
+import styled from "styled-components";
+
+import { ChatState } from "../../context/ChatProvider";
 import { recieveMessageRoute, sendMessageRoute } from "../../utils/APIRoutes";
 import { isGroupRecieved, isAnotherSender, isLastMessage } from "../../config/ChatLogics";
-import animationData from "../../assets/typing.json";
+
+import ChatInput from "./ChatInput";
 
 var selectedChatCompare;
 
 function SingleChat({ fetchAgain, socket, setFetchAgain, selectedChat }) {
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [newMessage, setNewMessage] = useState("");
     const [socketConnected, setSocketConnected] = useState(false);
-    const [typing, setTyping] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
 
     const { user } = ChatState();
@@ -49,6 +49,7 @@ function SingleChat({ fetchAgain, socket, setFetchAgain, selectedChat }) {
             setMessages(data);
             setLoading(false);
             socket.current.emit("join chat", selectedChat._id);
+            
         } catch (error) {
             toast.error("Failed to Load the Messages", toastOptions);
         }
@@ -62,8 +63,6 @@ function SingleChat({ fetchAgain, socket, setFetchAgain, selectedChat }) {
                     Authorization: `Bearer ${user.token}`,
                 },
             };
-            setNewMessage("");
-
             const { data } = await axios.post(
                 `${sendMessageRoute}`,
                 {
@@ -112,7 +111,7 @@ function SingleChat({ fetchAgain, socket, setFetchAgain, selectedChat }) {
                                         : ("sended")}`}>
 
                                 <div className={`${isGroupRecieved(message, selectedChat, user._id) ? 'sender-pic' : ''}`}>
-                                    {isLastMessage(messages, message, i, user._id)
+                                    {isGroupRecieved(message, selectedChat, user._id) && isLastMessage(messages, message, i, user._id)
                                         ? (<img src={process.env.REACT_APP_PROFILE_PICS_PATHS + message.sender.profilePic}
                                             alt={message.sender.username} />)
                                         : (<></>)
@@ -248,7 +247,7 @@ const Container = styled.div`
                 content: "";
                 position: absolute;
                 top: 0;
-                left: 0.65%;
+                left: 0;
                 width: 20px;
                 height: 20px;
                 background: linear-gradient(

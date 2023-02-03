@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import styled from "styled-components";
 import axios from "axios";
+import styled from "styled-components";
 import { ChatState } from "../../context/ChatProvider";
 import { fetchChatsRoute } from "../../utils/APIRoutes";
 import { getSender, getSenderProfilePic } from "../../config/ChatLogics";
@@ -109,12 +109,11 @@ function Contacts({ fetchAgain, selectedChat, setModalActive, modalActive }) {
                   </b>
                 </div>
               )}
-
           </div>
         </div>
       </Container>
       {modalActive === 'active'
-        ? <GroupChatCreate modalActive={modalActive} setModalActive={setModalActive} />
+        ? <GroupChatCreate setModalActive={setModalActive} />
         : <></>
       }
       <ToastContainer />

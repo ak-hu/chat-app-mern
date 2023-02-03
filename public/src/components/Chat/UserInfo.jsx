@@ -1,8 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { BiPowerOff } from "react-icons/bi";
-
-import { ChatState } from "../../context/ChatProvider";
 import styled from "styled-components";
+import { ChatState } from "../../context/ChatProvider";
 
 function UserInfo() {
     const { user } = ChatState();

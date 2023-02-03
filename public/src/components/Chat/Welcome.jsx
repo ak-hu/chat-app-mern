@@ -2,12 +2,11 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Robot from "../../assets/robot.gif";
 
-
 function Welcome() {
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
-    const getUserName = async() => {
+    const getUserName = async () => {
       setUserName(
         await JSON.parse(
           localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
@@ -33,9 +32,11 @@ const Container = styled.div`
   color: #000;
   flex-direction: column;
   background-color: #ededed;
+
   img {
     height: 20rem;
   }
+  
   span {
     color: #009688;
   }

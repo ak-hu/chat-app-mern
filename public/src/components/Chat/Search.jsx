@@ -1,9 +1,8 @@
 import { useState } from "react";
-import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import styled from "styled-components";
 import "react-toastify/dist/ReactToastify.css";
-
+import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
+import styled from "styled-components";
 import { accessChatRoute } from "../../utils/APIRoutes";
 import { ChatState } from "../../context/ChatProvider";
 
