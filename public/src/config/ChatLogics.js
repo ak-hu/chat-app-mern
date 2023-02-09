@@ -21,12 +21,6 @@ export const isAnotherSender = (message, userId) => {
   return message.sender._id !== userId
 };
 
-export const isFirstRecievedMessage = (message, chat, userId, counter_recieved) => {
-  return message.sender._id !== userId &&
-    chat.isGroupChat &&
-    counter_recieved === 1;
-};
-
 export const isGroupRecieved = (message, chat, userId) => {
   return message.sender._id !== userId &&
     chat.isGroupChat;
@@ -44,10 +38,6 @@ export const getSenderFull = (loggedUser, users) => {
   return users[0]._id === loggedUser._id ? users[1] : users[0];
 };
 
-
-export const isLastMessage = (messages, message, i, userId) => {
-  return (message.sender._id !== userId &&
-    i === 0) ||
-    (message.sender._id !== userId &&
-      messages[i - 1].sender._id !== message.sender._id)
+export const isLastMessage = (messages, message, i) => {
+  return i === 0 || messages[i - 1].sender._id !== message.sender._id
 };

@@ -33,7 +33,7 @@ const Container = styled.div`
     padding: 15px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     cursor: pointer;
-    transition: 0.5s ease-in-out;
+    transition: all 1s ease;
 
     &:last-child{
       border-bottom: none;

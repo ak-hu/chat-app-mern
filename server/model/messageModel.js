@@ -4,13 +4,17 @@ const mongoose = require("mongoose");
 const MessageSchema = mongoose.Schema(
   {
     content: {
-      type: String, required: true ,
+      type: String, 
+      required: true ,
     },
     sender: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    chat: {type: mongoose.Schema.Types.ObjectId, ref: "Chat",}
+    chat: {
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: "Chat",
+    }
   },
   {
     timestamps: true,

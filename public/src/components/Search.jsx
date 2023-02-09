@@ -3,8 +3,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import styled from "styled-components";
-import { accessChatRoute } from "../../utils/APIRoutes";
-import { ChatState } from "../../context/ChatProvider";
+import { accessChatRoute } from "../utils/APIRoutes";
+import { ChatState } from "../context/ChatProvider";
 
 function Search({ searchResults }) {
   const setCurrentChat = useState(undefined);

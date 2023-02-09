@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import Robot from "../../assets/robot.gif";
+import Robot from "../assets/robot.gif";
 
 function Welcome() {
   const [userName, setUserName] = useState("");

@@ -1,12 +1,10 @@
 const User = require("../model/userModel");
 const Chat = require("../model/chatModel");
 const mongoose = require('mongoose');
-const asyncHandler = require("express-async-handler");
 
-
-const accessChat = asyncHandler(async (req, res) => {
+const accessChat = async (req, res) => {
   const { userId } = req.body;
-  
+
   if (!userId) {
     console.log("UserId param not sent with request");
     return res.sendStatus(400);
@@ -24,12 +22,12 @@ const accessChat = asyncHandler(async (req, res) => {
     .populate("users", "-password")
     .populate("latestMessage");
 
-    isChat = await User.populate(isChat, {
+  isChat = await User.populate(isChat, {
     path: "latestMessage.sender",
-    select: "username, profilePic",
+    select: "username profilePic",
   });
 
-  const user2_id = await User.findOne({_id: mongoose.Types.ObjectId(`${userId}`) });
+  const user2_id = await User.findOne({ _id: mongoose.Types.ObjectId(`${userId}`) });
 
   const username = user2_id.username;
 
@@ -48,18 +46,18 @@ const accessChat = asyncHandler(async (req, res) => {
     try {
       const createdChat = await Chat.create(chatData);
       const FullChat = await Chat.findOne({ _id: createdChat._id })
-      .populate("users","-password")
-      .populate("groupAdmin", "-password")
-      .populate("latestMessage");
+        .populate("users", "-password")
+        .populate("groupAdmin", "-password")
+        .populate("latestMessage");
       res.status(200).json(FullChat);
     } catch (error) {
       res.status(400);
       throw Error(error.message);
     }
   }
-});
+};
 
-const fetchChats = asyncHandler(async (req, res) => {
+const fetchChats = async (req, res) => {
   try {
     Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
       .populate("users", "-password")
@@ -71,17 +69,15 @@ const fetchChats = asyncHandler(async (req, res) => {
           path: "latestMessage.sender",
           select: "username profilePic",
         });
-        console.log(results);
         res.status(200).send(results);
       });
-
   } catch (error) {
     res.status(400);
     throw new Error(error.message);
   }
-});
+};
 
-const createGroupChat = asyncHandler(async (req, res) => {
+const createGroupChat = async (req, res) => {
   if (!req.body.users || !req.body.name) {
     return res.status(400).send({ message: "Please Fill all the feilds" });
   }
@@ -117,12 +113,12 @@ const createGroupChat = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error(error.message);
   }
-});
+};
 
 // @desc    Rename Group
 // @route   PUT /api/chat/rename
 // @access  Protected
-const renameGroup = asyncHandler(async (req, res) => {
+const renameGroup = async (req, res) => {
   const { chatId, chatName } = req.body;
 
   const updatedChat = await Chat.findByIdAndUpdate(
@@ -143,13 +139,13 @@ const renameGroup = asyncHandler(async (req, res) => {
   } else {
     res.json(updatedChat);
   }
-});
+};
 
 // @desc    Rename Group
 // @route   PUT /api/chat/rename
 // @access  Protected
-const groupPicUpdate = asyncHandler(async (req, res) => {
-  const { chatId, groupPic } = req.body;
+const groupPicUpdate = async (req, res) => {
+  const { chatId } = req.body;
   const profilePicUrl = (req.file) ? req.file.filename : 'default.svg';
 
   const updatedChat = await Chat.findByIdAndUpdate(
@@ -169,12 +165,12 @@ const groupPicUpdate = asyncHandler(async (req, res) => {
   } else {
     res.json(updatedChat);
   }
-});
+};
 
 // @desc    Remove user from Group
 // @route   PUT /api/chat/groupremove
 // @access  Protected
-const removeFromGroup = asyncHandler(async (req, res) => {
+const removeFromGroup = async (req, res) => {
   const { chatId, userId } = req.body;
 
   // check if the requester is admin
@@ -197,12 +193,12 @@ const removeFromGroup = asyncHandler(async (req, res) => {
   } else {
     res.json(removed);
   }
-});
+};
 
 // @desc    Add user to Group / Leave
 // @route   PUT /api/chat/groupadd
 // @access  Protected
-const addToGroup = asyncHandler(async (req, res) => {
+const addToGroup = async (req, res) => {
   const { chatId, userId } = req.body;
 
   // check if the requester is admin
@@ -225,7 +221,7 @@ const addToGroup = asyncHandler(async (req, res) => {
   } else {
     res.json(added);
   }
-});
+};
 
 
 module.exports = {

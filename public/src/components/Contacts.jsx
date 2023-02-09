@@ -2,15 +2,15 @@ import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import styled from "styled-components";
-import { ChatState } from "../../context/ChatProvider";
-import { fetchChatsRoute } from "../../utils/APIRoutes";
-import { getSender, getSenderProfilePic } from "../../config/ChatLogics";
-import GroupChatCreate from "../Group/GroupChatCreate";
+import { ChatState } from "../context/ChatProvider";
+import { fetchChatsRoute } from "../utils/APIRoutes";
+import { getSender, getSenderProfilePic } from "../config/ChatLogics";
+import GroupChatCreate from "./Group/GroupChatCreate";
 
-function Contacts({ fetchAgain, selectedChat, setModalActive, modalActive }) {
+function Contacts({ fetchAgain, selectedChat, socket }) {
   const { setSelectedChat, chats, user, setChats } = ChatState();
-  const [loggedUser, setLoggedUser] = useState(undefined);
-  const [loading, setLoading] = useState(false)
+  const [modalActive, setModalActive] = useState('not');
+  const [ct, setCt] = useState();
 
   //styles for error notification
   const toastOptions = {
@@ -21,16 +21,8 @@ function Contacts({ fetchAgain, selectedChat, setModalActive, modalActive }) {
     theme: "dark",
   };
 
-  useEffect(() => {
-    const getLoggedUser = async () => {
-      setLoggedUser(await JSON.parse(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)));
-      fetchChats();
-    }
-    getLoggedUser();
-  }, [fetchAgain]);
 
   const fetchChats = async () => {
-    setLoading(true);
     try {
       const config = {
         headers: {
@@ -38,12 +30,41 @@ function Contacts({ fetchAgain, selectedChat, setModalActive, modalActive }) {
         },
       };
       const { data } = await axios.get(`${fetchChatsRoute}`, config);
-      setChats(data);
-      setLoading(false);
+      setChats(data)
     } catch (error) {
       toast.error("Failed to load the chats", toastOptions);
     }
   };
+
+  const newChat = async () => {
+    if (chats !== undefined && chats.length !== 0 && ct !== undefined) {
+      chats.map((chat) => {
+        var temp = Object.assign({}, chat);
+        if (temp._id === ct._id) {
+          temp.latestMessage.content = ct.latestMessage.content;
+          temp.latestMessage.createdAt = ct.latestMessage.createdAt;
+          temp.latestMessage.updatedAt = ct.latestMessage.updatedAt;
+        }
+        return temp;
+      })
+      return chats;
+    }
+  };
+
+  useEffect(() => {
+    newChat();
+    if (socket.current) {
+      socket.current.on('contacts', (data) => {
+        setCt(data);
+      });
+    } else {
+      console.log("socket doesn't connected")
+    }
+  });
+
+  useEffect(() => {
+    fetchChats();
+  }, [fetchAgain]);
 
   return (
     <>
@@ -54,48 +75,49 @@ function Contacts({ fetchAgain, selectedChat, setModalActive, modalActive }) {
               ? (
                 <>
                   <div className="contacts">
-                    {chats.map((chat) => (
-                      <div
-                        onClick={() => setSelectedChat(chat)}
-                        key={chat._id}
-                        className={`contact ${selectedChat === chat ? ("selected") : ("")}`}
-                      >
-                        <div className="avatar" >
-                          <img src={process.env.REACT_APP_PROFILE_PICS_PATHS +
-                            (chat.isGroupChat
-                              ? chat.groupPic
-                              : getSenderProfilePic(user, chat.users))
-                          }
-                            alt={chat.isGroupChat
-                              ? chat.chatName
-                              : getSender(user, chat.users)} />
-                        </div>
-                        <div className="grid-wrapper">
-                          <h4 className="chat-name">
-                            {chat.isGroupChat
-                              ? chat.chatName
-                              : getSender(user, chat.users)}
-                          </h4>
-                          {chat.latestMessage && (
-                            <span className="time">
-                              {chat.latestMessage.createdAt
-                                .split('.')[0]
-                                .split('T')[1]
-                                .split(':', 2)
-                                .join(':')}
-                            </span>
-                          )}
-                          {chat.latestMessage && (
-                            <div className="lattest-message">
-                              <span>{chat.latestMessage.sender.username} : </span>
-                              {chat.latestMessage.content.length > 50
-                                ? chat.latestMessage.content.substring(0, 51) + "..."
-                                : chat.latestMessage.content}
-                            </div>
-                          )}
-                        </div>
+                    {chats.map((chat) =>
+                    (<div
+                      onClick={() => setSelectedChat(chat)}
+                      key={chat._id}
+                      className={`contact ${selectedChat === chat ? "selected" : ""}`}
+                    >
+                      <div className="avatar" >
+                        <img src={process.env.REACT_APP_PROFILE_PICS_PATHS +
+                          (chat.isGroupChat
+                            ? chat.groupPic
+                            : getSenderProfilePic(user, chat.users))
+                        }
+                          alt={chat.isGroupChat
+                            ? chat.chatName
+                            : getSender(user, chat.users)} />
                       </div>
-                    ))}
+                      <div className="grid-wrapper">
+                        <h4 className="chat-name">
+                          {chat.isGroupChat
+                            ? chat.chatName
+                            : getSender(user, chat.users)}
+                        </h4>
+                        {chat.latestMessage && (
+                          <span className="time">
+                            {chat.latestMessage.createdAt
+                              .split('.')[0]
+                              .split('T')[1]
+                              .split(':', 2)
+                              .join(':')}
+                          </span>
+                        )}
+                        {chat.latestMessage && (
+                          <div className="lattest-message">
+                            <span>{chat.latestMessage.sender.username} : </span>
+                            {chat.latestMessage.content.length > 50
+                              ? chat.latestMessage.content.substring(0, 51) + "..."
+                              : chat.latestMessage.content}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    )
+                    )}
                   </div>
                   <div className={`add-group-chat`} onClick={() => { setModalActive('active') }}>
                     <button>+</button>

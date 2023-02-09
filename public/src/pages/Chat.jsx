@@ -12,11 +12,11 @@ import styled from "styled-components";
 import { ChatState } from "../context/ChatProvider";
 import { allUsersRoute, host } from "../utils/APIRoutes";
 
-import ChatContainer from "../components/Chat/ChatContainer";
-import Contacts from "../components/Chat/Contacts";
-import Welcome from "../components/Chat/Welcome";
-import Search from "../components/Chat/Search";
-import UserInfo from "../components/Chat/UserInfo";
+import ChatContainer from "../components/ChatContainer";
+import Contacts from "../components/Contacts";
+import Welcome from "../components/Welcome";
+import Search from "../components/Search";
+import UserInfo from "../components/UserInfo";
 
 
 function Chat() {
@@ -27,7 +27,7 @@ function Chat() {
   const [searchResults, setSearchResult] = useState([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
-  const [modalActive, setModalActive] = useState('not');
+
   const {
     selectedChat,
     user,
@@ -104,10 +104,10 @@ function Chat() {
                 <div className="contacts-container">
                   {search === "" || navState === 'start' ? (
                     <div>
-                      <Contacts selectedChat={selectedChat} fetchAgain={fetchAgain} setModalActive={setModalActive} modalActive={modalActive} />
+                      <Contacts selectedChat={selectedChat} fetchAgain={fetchAgain} socket={socket} />
                     </div>
                   ) : (
-                    <Search searchResults={searchResults} />
+                    <Search searchResults={searchResults} socket={socket} />
                   )}
                 </div>
               </div>
@@ -138,9 +138,8 @@ const Container = styled.div`
 
   .container {
     position: relative;
-    width: 1298px;
-    max-width: 100%;
-    height: calc(100vh - 40px);
+    width: 100vw;
+    height: 100vh;
     background: #fff;
     display: grid;
     grid-template-columns: 30% 70%;

@@ -5,19 +5,16 @@ import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import styled from "styled-components";
 
-import { ChatState } from "../../context/ChatProvider";
-import { recieveMessageRoute, sendMessageRoute } from "../../utils/APIRoutes";
-import { isGroupRecieved, isAnotherSender, isLastMessage } from "../../config/ChatLogics";
+import { ChatState } from "../context/ChatProvider";
+import { recieveMessageRoute, sendMessageRoute } from "../utils/APIRoutes";
+import { isGroupRecieved, isAnotherSender, isLastMessage } from "../config/ChatLogics";
 
 import ChatInput from "./ChatInput";
 
-var selectedChatCompare;
 
 function SingleChat({ fetchAgain, socket, setFetchAgain, selectedChat }) {
     const [messages, setMessages] = useState([]);
-    const [loading, setLoading] = useState(false);
     const [socketConnected, setSocketConnected] = useState(false);
-    const [isTyping, setIsTyping] = useState(false);
 
     const { user } = ChatState();
 
@@ -30,30 +27,6 @@ function SingleChat({ fetchAgain, socket, setFetchAgain, selectedChat }) {
         theme: "dark",
     };
 
-    const fetchMessages = async () => {
-        if (!selectedChat) return;
-
-        try {
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${user.token}`,
-                },
-            };
-
-            setLoading(true);
-
-            const { data } = await axios.get(
-                `${recieveMessageRoute}/${selectedChat._id}`,
-                config
-            );
-            setMessages(data);
-            setLoading(false);
-            socket.current.emit("join chat", selectedChat._id);
-            
-        } catch (error) {
-            toast.error("Failed to Load the Messages", toastOptions);
-        }
-    };
 
     const sendMessage = async (msg) => {
         try {
@@ -74,27 +47,53 @@ function SingleChat({ fetchAgain, socket, setFetchAgain, selectedChat }) {
             );
             socket.current.emit("new message", data);
             setMessages([...messages, data]);
+            socket.current.emit('contacts', data.chat);
         } catch (error) {
             toast.error("Failed to send the Message", toastOptions);
         }
     };
 
+
+    useEffect(() => {
+        const fetchMessages = async () => {
+            if (!selectedChat) return;
+
+            try {
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                };
+
+                const { data } = await axios.get(
+                    `${recieveMessageRoute}/${selectedChat._id}`,
+                    config
+                );
+                setMessages(data);
+                socket.current.emit("join chat", selectedChat._id);
+            } catch (error) {
+                toast.error("Failed to Load the Messages", toastOptions);
+            }
+        };
+        fetchMessages();
+    }, [selectedChat]);
+
+
+    useEffect(() => {
+        socket.current.on("message recieved", (newMessageRecieved) => {
+            setMessages([...messages, newMessageRecieved]);
+        });
+    });
+
+
     useEffect(() => {
         if (socket.current) {
             socket.current.on("connected", () => setSocketConnected(true));
-            socket.current.on("typing", () => setIsTyping(true));
-            socket.current.on("stop typing", () => setIsTyping(false));
         } else {
             console.log("socket doesn't connected")
         }
     }, []);
 
-    useEffect(() => {
-        fetchMessages();
-        selectedChatCompare = selectedChat;
-    }, [selectedChat]);
-
-    let counter_sended = 0;
     return (
         <>
             <Container>
@@ -105,32 +104,32 @@ function SingleChat({ fetchAgain, socket, setFetchAgain, selectedChat }) {
                                 className={`message
                                     ${isGroupRecieved(message, selectedChat, user._id) ? "recieved-group" : ""} 
                                     ${isAnotherSender(message, user._id)
-                                        ? (isLastMessage(messages, message, i, user._id)
+                                        ? (isLastMessage(messages, message, i)
                                             ? "recieved"
                                             : "recieved margin-10")
                                         : ("sended")}`}>
 
                                 <div className={`${isGroupRecieved(message, selectedChat, user._id) ? 'sender-pic' : ''}`}>
-                                    {isGroupRecieved(message, selectedChat, user._id) && isLastMessage(messages, message, i, user._id)
+                                    {isGroupRecieved(message, selectedChat, user._id) && isLastMessage(messages, message, i)
                                         ? (<img src={process.env.REACT_APP_PROFILE_PICS_PATHS + message.sender.profilePic}
                                             alt={message.sender.username} />)
                                         : (<></>)
                                     }
                                 </div>
                                 <div className="content">
-                                    {isLastMessage(messages, message, i, user._id)
+                                    {isGroupRecieved(message, selectedChat, user._id) && isLastMessage(messages, message, i, user._id)
                                         ? (<div className="sender-username">
-                                            <a>{message.sender.username}</a>
+                                            <span>{message.sender.username}</span>
                                         </div>)
                                         : (<div></div>)
                                     }
                                     {isAnotherSender(message, user._id)
-                                        ? (<p className={`${isLastMessage(messages, message, i, user._id) ? 'triangle' : ''}`}>
+                                        ? (<p className={`${isLastMessage(messages, message, i) ? 'triangle' : ''}`}>
                                             {message.content}
                                         </p>)
                                         : (<>
-                                            <span id={counter_sended++}></span>
-                                            <p className={`${counter_sended === 1 ? 'triangle' : ''}`}>
+
+                                            <p className={`${isLastMessage(messages, message, i) ? 'triangle' : ''}`}>
                                                 {message.content}
                                             </p>
                                         </>)
@@ -180,14 +179,11 @@ const Container = styled.div`
         border-radius: 1rem;
       }
     }
-    .margin-10{
-        margin-top: -10px;
-    }
+
     .message {
       position: relative;
       display: flex;
       align-items: center;
-      transition: all 1s ease;
       .content {
         max-width: 60%;
         overflow-wrap: break-word;
@@ -234,15 +230,18 @@ const Container = styled.div`
         }
     }
     .recieved{
+        display: flex;
         justify-content: flex-start;
         align-items: flex-start;
         gap: 0.5rem;
 
-        & + &{
-            gap: 0.2rem;
+        &:not(:first-child){
+            margin-top: -4px;
         }
+
         .content {
             background: #fff;
+
             .triangle::before{
                 content: "";
                 position: absolute;
@@ -262,16 +261,22 @@ const Container = styled.div`
 
     }
     .recieved-group {
+        display: flex;
         justify-content: flex-start;
         gap: 1.2rem;
         align-items: flex-start;
-      .content {
-        margin-top: 0.4rem;
-        background: #fff;
-        
-        p{
-            margin-bottom: 5px;
+
+        &:not(:first-child){
+            margin-top: -10px;
         }
+
+        .content {
+            margin-top: 0.4rem;
+            background: #fff;
+        
+            p{
+                margin-bottom: 5px;
+            }
             .triangle::before{
                 content: "";
                 position: absolute;

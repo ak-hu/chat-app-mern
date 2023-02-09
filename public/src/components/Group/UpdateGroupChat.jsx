@@ -27,6 +27,7 @@ const UpdateGroupChat = ({ fetchAgain, setFetchAgain, setModalActive }) => {
     const [loading, setLoading] = useState(false);
     const [renameloading, setRenameLoading] = useState(false);
     const [isActive, setIsActive] = useState('not-active');
+    const [activeSearch, setActiveSearch] = useState(false)
 
     const { selectedChat, setSelectedChat, user } = ChatState();
 
@@ -81,6 +82,7 @@ const UpdateGroupChat = ({ fetchAgain, setFetchAgain, setModalActive }) => {
             return;
         }
         try {
+            setActiveSearch(true);
             setLoading(true);
             const config = {
                 headers: {
@@ -157,6 +159,8 @@ const UpdateGroupChat = ({ fetchAgain, setFetchAgain, setModalActive }) => {
             setSelectedChat(data);
             setFetchAgain(!fetchAgain);
             setLoading(false);
+            setActiveSearch(false);
+            toast.success("User is successfully added to the group", toastOptions);
         } catch (error) {
             toast.error(error.response.data.message, toastOptions);
             setLoading(false);
@@ -199,7 +203,7 @@ const UpdateGroupChat = ({ fetchAgain, setFetchAgain, setModalActive }) => {
     return (
         <>
             <Container>
-                <div className="modal-container">
+                <div className={`modal-container ${activeSearch ? 'active-search' : ''}`}>
                     <div className='close-button-wrapper'>
                         <button className='close-button' onClick={() => { setModalActive('not') }}>
                             <GrFormClose />
@@ -213,7 +217,7 @@ const UpdateGroupChat = ({ fetchAgain, setFetchAgain, setModalActive }) => {
                         </div>
                         <h2>{selectedChat.chatName}</h2>
                     </div>
-                    <div className='modal-content' >
+                    <div className="modal-content" >
                         <div className='selected-users-wrapper'>
                             {selectedChat.users.map((u) => (
                                 <UserBage
@@ -232,7 +236,7 @@ const UpdateGroupChat = ({ fetchAgain, setFetchAgain, setModalActive }) => {
                                     onChange={(e) => setGroupChatName(e.target.value)}
                                 />
                                 <BsPencil />
-                                <button onClick={handleRename}>Update</button>
+                                <button className="button-submit" onClick={handleRename}>Update</button>
                             </div>
                             <div className="modal-input">
                                 <input
@@ -243,7 +247,7 @@ const UpdateGroupChat = ({ fetchAgain, setFetchAgain, setModalActive }) => {
                                     onChange={(event) => getImage(event)}
                                 />
                                 <MdOutlineAddAPhoto />
-                                <button onClick={imageUpload}>Upload</button>
+                                <button className="button-submit" onClick={imageUpload}>Upload</button>
                             </div>
                             <div className='modal-input'>
                                 <input
@@ -255,14 +259,15 @@ const UpdateGroupChat = ({ fetchAgain, setFetchAgain, setModalActive }) => {
                         </div>
 
                         <div className="width-100">
-                            {loading ? (
-                                <div>Loading...</div>
+                            {loading || !activeSearch || search === "" ? (
+                                <></>
                             ) : (
                                 searchResult?.map((result) => (
                                     <UserListItem
                                         key={result._id}
                                         result={result}
                                         handleFunction={() => handleAddUser(result)}
+                                        
                                     />
                                 ))
                             )}
@@ -284,21 +289,21 @@ const Container = styled.div`
     height: 100vh;
     z-index: 4;
 
+
     .modal-container{
-        position: fixed;
+        position: relative;
         left: 32%;
         top: 10%;
         display: grid;
         grid-template-rows: 10% 90%;
         justify-content: center;
-        align-items: flex-start;
         gap: 2rem;
         width: 500px;
         min-height: 350px;
         background-color: #fff;
         border-radius: 10px;
         box-shadow: 0 20px 20px rgba(0, 0, 0, 0.1);
-        padding: 1.8rem 0 0.2rem 0;
+        padding: 1.8rem 0.5rem;
 
         .modal-header{
             width: 450px;
@@ -319,8 +324,9 @@ const Container = styled.div`
         .modal-content{
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: center;
             gap: 2rem;
+            padding: 0 1rem;
             
             .inputs{
                 width: 100%;
@@ -395,9 +401,20 @@ const Container = styled.div`
                         font-size: 1.5rem;
                         transition: all 0.2s ease;
                     }
+                    .button-submit{
+                        border: none;
+                        background-color: #009688;
+                        padding: 0.5rem 1rem;
+                        border-radius: 5px;
+                        color: #fff;
+                        margin-left: 1rem;
+                    }
                 }
             }
         }
+    }
+    .active-search{
+        top: 3% !important;
     }
     .close-button-wrapper{
         position: absolute;
@@ -412,6 +429,7 @@ const Container = styled.div`
     }
     .selected-users-wrapper{
         display: flex;
+        flex-wrap: wrap;
         gap: 0.8rem;
         margin: 1rem 0;
     }

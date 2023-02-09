@@ -19,6 +19,7 @@ function GroupChatCreate({ setModalActive }) {
     const [search, setSearch] = useState("");
     const [searchResult, setSearchResult] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [activeSearch, setActiveSearch] = useState(false)
 
     const { user, chats, setChats } = ChatState();
 
@@ -47,6 +48,7 @@ function GroupChatCreate({ setModalActive }) {
             return;
         }
         try {
+            setActiveSearch(true);
             setLoading(true);
             const config = {
                 headers: {
@@ -134,9 +136,9 @@ function GroupChatCreate({ setModalActive }) {
                                 />
                             ))}
                         </div>
-                        {loading ? (
+                        {loading || !activeSearch || search === "" ? (
                             // <ChatLoading />
-                            <div>Loading...</div>
+                            <></>
                         ) : (
                             searchResult?.slice(0, 4)
                                 .map((result) => (
@@ -178,7 +180,7 @@ const Container = styled.div`
         grid-template-rows: 10% 90%;
         justify-content: center;
         align-items: center;
-        padding: 1.8rem 0 0.2rem 0;
+        padding: 1.8rem 1rem;
         background: #fff;
         border-radius: 10px;
         box-shadow: 0 20px 20px rgba(0, 0, 0, 0.1);
@@ -247,7 +249,7 @@ const Container = styled.div`
             text-align: center;
         }
         .button{
-            margin: 0;
+            margin-top: 1rem;
             padding: 0.5rem 0;
             width: 50%;
         }

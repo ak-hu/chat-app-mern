@@ -4,11 +4,11 @@ import { RxExit, RxPencil2 } from "react-icons/rx";
 import { GoKebabVertical } from "react-icons/go";
 import styled from "styled-components";
 
-import { ChatState } from "../../context/ChatProvider";
-import { getSender, getSenderProfilePic } from "../../config/ChatLogics";
+import { ChatState } from "../context/ChatProvider";
+import { getSender, getSenderProfilePic } from "../config/ChatLogics";
 
-import UpdateGroupChat from "../Group/UpdateGroupChat";
-import LeaveChat from "../Group/LeaveChat";
+import UpdateGroupChat from "./Group/UpdateGroupChat";
+import LeaveChat from "./Group/LeaveChat";
 import SingleChat from "./SingleChat";
 
 export default function ChatContainer({ socket, fetchAgain, setFetchAgain }) {
@@ -62,7 +62,10 @@ export default function ChatContainer({ socket, fetchAgain, setFetchAgain }) {
         ) : (
           <div className={`${showToggle ? 'chat-menu-toggle ' : 'none'}`}>
             <div className="list-item">
-              <button>delete chat</button>
+              <button className="list-item" onClick={() => { { setModalSubmitActive("active") } { setShowToggle(!showToggle) } }}>
+                <RxExit />
+                <span>Delete Chat</span>
+              </button>
             </div>
           </div>
         )}
@@ -86,7 +89,7 @@ const Container = styled.div`
   display: grid;
   grid-template-rows: 10% 90%;
   overflow: hidden;
-  transition: all 0.5s ease;
+
 
   .chat-header {
     background: #ededed;
@@ -95,6 +98,7 @@ const Container = styled.div`
     gap: 0.5rem;
     align-items: center;
     padding: 0.5rem 0;
+    transition: all 1s ease;
 
     &__button{
       font-size: 1.5rem;
