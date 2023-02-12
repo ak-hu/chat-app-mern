@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
@@ -33,12 +33,6 @@ function Register({isLoginActive}) {
     profilePic: "",
   });
 
-  //checking if user is already loged in
-  useEffect(() => {
-    if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
-      navigate("/");
-    }
-  }, []);
 
   //setting values of inputs
   const handleChange = (event) => {

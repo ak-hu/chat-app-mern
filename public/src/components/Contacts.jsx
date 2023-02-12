@@ -22,6 +22,10 @@ function Contacts({ fetchAgain, selectedChat, socket }) {
   };
 
 
+  useEffect(() => {
+    fetchChats();
+  }, [fetchAgain]);
+
   const fetchChats = async () => {
     try {
       const config = {
@@ -30,7 +34,7 @@ function Contacts({ fetchAgain, selectedChat, socket }) {
         },
       };
       const { data } = await axios.get(`${fetchChatsRoute}`, config);
-      setChats(data)
+      setChats(data);
     } catch (error) {
       toast.error("Failed to load the chats", toastOptions);
     }
@@ -52,19 +56,16 @@ function Contacts({ fetchAgain, selectedChat, socket }) {
   };
 
   useEffect(() => {
-    newChat();
     if (socket.current) {
       socket.current.on('contacts', (data) => {
         setCt(data);
       });
+      newChat();
     } else {
       console.log("socket doesn't connected")
     }
   });
 
-  useEffect(() => {
-    fetchChats();
-  }, [fetchAgain]);
 
   return (
     <>

@@ -1,7 +1,8 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Chat from "./pages/Chat";
 import ChatProvider from './context/ChatProvider';
+
+import Chat from "./pages/Chat";
 import Authorization from "./pages/Authorization";
 
 export default function App() {

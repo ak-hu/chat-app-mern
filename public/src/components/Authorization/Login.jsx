@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
+
 import { RxPerson, RxEyeOpen, RxEyeClosed } from "react-icons/rx";
 import { FiLock } from "react-icons/fi";
 import axios from "axios";
@@ -24,12 +25,6 @@ function Login({isActive}) {
     theme: "dark",
   };
 
-  //checking if user is already loged in
-  useEffect(() => {
-    if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
-      navigate("/");
-    }
-  }, []);
 
   //setting values of inputs
   const handleChange = (event) => {
