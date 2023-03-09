@@ -52,7 +52,7 @@ module.exports.login = async (req, res, next) => {
         if (!user) {
             return res.json({ msg: "Incorrect username or password", status: false });
         }
-        
+
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.json({ msg: "Incorrect username or password", status: false });
@@ -87,5 +87,142 @@ module.exports.getAllUsers = async (req, res, next) => {
         res.send(users);
     } catch (e) {
         next(e);
+    }
+};
+
+module.exports.renameUser = async (req, res) => {
+    const { userId, newUsername } = req.body;
+    const usernameCheck = await User.findOne({ username: newUsername });
+
+    if (usernameCheck) {
+        return res.json({ msg: "The username is already used", status: false });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        {
+            username: newUsername,
+        },
+        {
+            new: true,
+        }
+    );
+    if (!updatedUser) {
+        res.status(404);
+        throw new Error("User Not Found");
+    } else {
+        res.json({
+            status: true, updatedUser: {
+                _id: updatedUser._id,
+                username: updatedUser.username,
+                email: updatedUser.email,
+                profilePic: updatedUser.profilePic,
+                isAdmin: updatedUser.isAdmin,
+                token: generateToken(updatedUser._id),
+            }
+        });
+    }
+};
+
+
+module.exports.emailUpdate = async (req, res) => {
+    const { userId, newEmail } = req.body;
+    const emailCheck = await User.findOne({ email: newEmail });
+
+    if (emailCheck) {
+        return res.json({ msg: "The email is already used", status: false });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        {
+            email: newEmail,
+        },
+        {
+            new: true,
+        }
+    );
+    if (!updatedUser) {
+        res.status(404);
+        throw new Error("User Not Found");
+    } else {
+        res.json({
+            status: true, updatedUser: {
+                _id: updatedUser._id,
+                username: updatedUser.username,
+                email: updatedUser.email,
+                profilePic: updatedUser.profilePic,
+                isAdmin: updatedUser.isAdmin,
+                token: generateToken(updatedUser._id),
+            }
+        });
+    }
+};
+
+// @desc    Update Profile Pic
+// @route   PUT /api/auth/rename
+// @access  Protected
+module.exports.profilePicUpdate = async (req, res) => {
+    const { userId } = req.body;
+    const profilePicUrl = (req.file) ? req.file.filename : 'default.svg';
+
+    const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        {
+            profilePic: profilePicUrl,
+        },
+        {
+            new: true,
+        }
+    );
+    if (!updatedUser) {
+        res.status(404);
+        throw new Error("Chat Not Found");
+    } else {
+        res.json({
+            status: true, updatedUser: {
+                _id: updatedUser._id,
+                username: updatedUser.username,
+                email: updatedUser.email,
+                profilePic: updatedUser.profilePic,
+                isAdmin: updatedUser.isAdmin,
+                token: generateToken(updatedUser._id),
+            }
+        });
+    }
+};
+
+module.exports.passwordUpdate = async (req, res) => {
+    const { userId, oldPassword, newPassword } = req.body;
+    console.log('--------------------------------------------------------------------------------------');
+
+    const user = await User.findOne({ _id: userId });
+    console.log(user);
+
+    const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+
+    if (!isPasswordValid) {
+        console.log("Incorrect password");
+        return res.json({ msg: "Incorrect password", status: false });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    console.log(hashedPassword);
+    const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        {
+            password: hashedPassword,
+        },
+        {
+            new: true,
+        }
+    );
+    if (!updatedUser) {
+        res.status(404);
+        throw new Error("User Not Found");
+    } else {
+        delete updatedUser.password;
+        res.json({status: true})
+        console.log('password changed')
     }
 };

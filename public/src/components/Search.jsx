@@ -2,7 +2,6 @@ import { useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
-import styled from "styled-components";
 import { accessChatRoute } from "../utils/APIRoutes";
 import { ChatState } from "../context/ChatProvider";
 
@@ -56,7 +55,7 @@ function Search({ searchResults }) {
 
   return (
     <>
-      <Container>
+      <div className="search">
         {searchResults.length !== 0 ? (
           <div className="results">
             {searchResults?.map((result) => (
@@ -82,58 +81,10 @@ function Search({ searchResults }) {
             <b>No users found</b>
           </div>
         )}
-      </Container>
+      </div>
       <ToastContainer />
     </>
   );
 }
 
-const Container = styled.div`
-  .results{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow: auto;
-
-  .outer{
-    width: 100%;
-    padding: 15px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-    cursor: pointer;
-    transition: 0.5s ease-in-out;
-
-    &:last-child{
-      border-bottom: none;
-    }
-    &:hover{
-      background: #f5f5f5;
-    }
-    &:focus{
-      background-color: #9a86f3;
-    }
-  }
-
-  .result {
-    display: grid;
-    grid-template-columns: 20% 80%;
-    align-items: stretch;
-
-    img {
-      border-radius: 100%;
-      height: 3rem;
-      width: 3rem;
-      max-inline-size: 100%;
-    }
-    h4 {
-      color: #111;
-    }
-  } 
-}
-.chat-loading{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 30rem;
-}
-`;
 export default Search;

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components";
 import Robot from "../assets/robot.gif";
 
 function Welcome() {
@@ -15,31 +14,14 @@ function Welcome() {
     }; getUserName();
   }, []);
   return (
-    <Container>
+    <div className="welcome">
       <img src={Robot} alt="Robot waves his palm" />
       <h1>
         Welcome, <span>{userName}!</span>
       </h1>
       <h3>Select a chat to start messaging.</h3>
-    </Container>
+    </div>
   );
 }
-
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #000;
-  flex-direction: column;
-  background-color: #ededed;
-
-  img {
-    height: 20rem;
-  }
-  
-  span {
-    color: #009688;
-  }
-`;
 
 export default Welcome;

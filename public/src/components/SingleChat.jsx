@@ -3,7 +3,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 
 import axios from "axios";
-import styled from "styled-components";
 
 import { ChatState } from "../context/ChatProvider";
 import { recieveMessageRoute, sendMessageRoute } from "../utils/APIRoutes";
@@ -96,7 +95,7 @@ function SingleChat({ fetchAgain, socket, setFetchAgain, selectedChat }) {
 
     return (
         <>
-            <Container>
+            <div className="messages-container">
                 <div className="chat-messages">
                     {messages.map((message, i) => {
                         return (
@@ -105,8 +104,8 @@ function SingleChat({ fetchAgain, socket, setFetchAgain, selectedChat }) {
                                     ${isGroupRecieved(message, selectedChat, user._id) ? "recieved-group" : ""} 
                                     ${isAnotherSender(message, user._id)
                                         ? (isLastMessage(messages, message, i)
-                                            ? "recieved"
-                                            : "recieved margin-10")
+                                            ? "recieved margin-10"
+                                            : "recieved")
                                         : ("sended")}`}>
 
                                 <div className={`${isGroupRecieved(message, selectedChat, user._id) ? 'sender-pic' : ''}`}>
@@ -146,171 +145,10 @@ function SingleChat({ fetchAgain, socket, setFetchAgain, selectedChat }) {
                     })}
                 </div>
                 <ChatInput handleSendMsg={sendMessage} />
-            </Container>
+            </div>
             <ToastContainer />
         </>
     );
 };
-
-const Container = styled.div`
-  display: grid;
-  grid-template-rows: 90% 10%;
-  overflow: hidden;
-  @media screen and (min-width: 720px) and (max-width: 1080px) {
-    grid-template-rows: 85% 15%;
-  }
-  p{
-    color: #000;
-  }
-
-  .chat-messages {
-    position: relative;
-    display: flex;
-    padding: 1rem;
-    gap: 0.5rem;
-    flex-direction: column;
-    overflow: auto;
-    &::-webkit-scrollbar {
-      width: 0;
-
-      &-thumb {
-        background-color: #ffffff39;
-        width: 0.1rem;
-        border-radius: 1rem;
-      }
-    }
-
-    .message {
-      position: relative;
-      display: flex;
-      align-items: center;
-      .content {
-        max-width: 60%;
-        overflow-wrap: break-word;
-        padding: 0.8rem;
-        font-size: 0.9rem;
-        border-radius: 0.7rem;
-        @media screen and (min-width: 720px) and (max-width: 1080px) {
-          max-width: 70%;
-        }
-      }
-      .sender-pic{
-        width: 1.5rem;
-        height: 1.5rem;
-
-        img{
-            width: 1.5rem;
-            height: 1.5rem;
-            border-radius: 100%;
-        }
-      }
-    }
-    .sended {
-        justify-content: flex-end;
-        .content{
-            background: #dcf8c8;
-            margin-top: 5px;
-            
-            .triangle::before {
-                content: "";
-                position: absolute;
-                top: 8%;
-                right: -1.1%;
-                width: 20px;
-                height: 20px;
-                background: linear-gradient(
-                    135deg,
-                    #dcf8c6 0%,
-                    #dcf8c6 50%,
-                    transparent 50%,
-                    transparent
-                );
-            
-            }
-        }
-    }
-    .recieved{
-        display: flex;
-        justify-content: flex-start;
-        align-items: flex-start;
-        gap: 0.5rem;
-
-        &:not(:first-child){
-            margin-top: -4px;
-        }
-
-        .content {
-            background: #fff;
-
-            .triangle::before{
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 20px;
-                height: 20px;
-                background: linear-gradient(
-                    225deg,
-                    #fff 0%,
-                    #fff 50%,
-                    transparent 50%,
-                    transparent
-                );
-            }
-        }
-
-    }
-    .recieved-group {
-        display: flex;
-        justify-content: flex-start;
-        gap: 1.2rem;
-        align-items: flex-start;
-
-        &:not(:first-child){
-            margin-top: -10px;
-        }
-
-        .content {
-            margin-top: 0.4rem;
-            background: #fff;
-        
-            p{
-                margin-bottom: 5px;
-            }
-            .triangle::before{
-                content: "";
-                position: absolute;
-                top: 0.4rem;
-                left: 2.1rem;
-                width: 20px;
-                height: 20px;
-                background: linear-gradient(
-                    225deg,
-                    #fff 0%,
-                    #fff 50%,
-                    transparent 50%,
-                    transparent
-                );
-            }
-            .sender-username{
-                margin-bottom: 5px;
-                font-weight: 550;
-
-                a{
-                    color: #009688;
-                }
-            }
-        }
-    }
-    .time{
-        width: 30px;
-        display: block;
-        text-align: left;
-        font-size: 0.7rem;
-        opacity: 0.5;
-      }
-  }
-`;
-
 
 export default SingleChat;

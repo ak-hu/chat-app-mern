@@ -6,7 +6,6 @@ import { MdOutlineAddAPhoto } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 
 import axios from "axios";
-import styled from "styled-components";
 
 import { ChatState } from "../../context/ChatProvider";
 import {
@@ -202,7 +201,7 @@ const UpdateGroupChat = ({ fetchAgain, setFetchAgain, setModalActive }) => {
 
     return (
         <>
-            <Container>
+            <div className="update-group modal-wrapper">
                 <div className={`modal-container ${activeSearch ? 'active-search' : ''}`}>
                     <div className='close-button-wrapper'>
                         <button className='close-button' onClick={() => { setModalActive('not') }}>
@@ -258,197 +257,26 @@ const UpdateGroupChat = ({ fetchAgain, setFetchAgain, setModalActive }) => {
                             </div>
                         </div>
 
-                        <div className="width-100">
+                        <div className="width-100 search-users">
                             {loading || !activeSearch || search === "" ? (
                                 <></>
                             ) : (
-                                searchResult?.map((result) => (
-                                    <UserListItem
-                                        key={result._id}
-                                        result={result}
-                                        handleFunction={() => handleAddUser(result)}
-                                        
-                                    />
-                                ))
+                                searchResult?.slice(0, 2)
+                                    .map((result) => (
+                                        <UserListItem
+                                            key={result._id}
+                                            result={result}
+                                            handleFunction={() => handleAddUser(result)}
+                                        />
+                                    ))
                             )}
                         </div>
                     </div>
                 </div>
-            </Container>
+            </div>
             <ToastContainer />
         </>
     );
 };
-
-const Container = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.4);
-    width: 100vw;
-    height: 100vh;
-    z-index: 4;
-
-
-    .modal-container{
-        position: relative;
-        left: 32%;
-        top: 10%;
-        display: grid;
-        grid-template-rows: 10% 90%;
-        justify-content: center;
-        gap: 2rem;
-        width: 500px;
-        min-height: 350px;
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 20px 20px rgba(0, 0, 0, 0.1);
-        padding: 1.8rem 0.5rem;
-
-        .modal-header{
-            width: 450px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-
-            .avatar {
-                img {
-                  border-radius: 100%;
-                  height: 3rem;
-                  width: 3rem;
-                }
-            }
-        }
-
-        .modal-content{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2rem;
-            padding: 0 1rem;
-            
-            .inputs{
-                width: 100%;
-        
-                .modal-input{
-                    position: relative;
-                    height: 40px;
-                    width: 100%;
-
-                    & + .modal-input{
-                        margin-top: 2rem;
-                    }
-
-                    input{
-                        height: 90%;
-                        width: 70%;
-                        font-size: 16px;
-                        padding: 0 35px;
-                        border: none;
-                        outline: none;
-                        border-top: 2px solid transparent;
-                        border-bottom: 2px solid #ccc;
-                        transition: all 0.2s ease;
-          
-                        &[type="file"]{
-                            height: 90%;
-                            color: #747474;
-                            padding-top: 1.5%;
-                            border-bottom-color: #ccc;
-            
-                            &::-webkit-file-upload-button{
-                                display:none;
-                            }
-                            &:focus{
-                                border-bottom-color: #009688;
-                            }
-            
-                            & ~ svg{
-                                color: #999;
-                            }
-                        }
-
-                        &:focus{
-                            border-bottom-color: #009688;
-          
-                            & ~ svg{
-                                color: #009688;
-                            }
-                        }
-                        &:not(:placeholder-shown){
-                            &:not([type="file" i]){
-                                border-bottom-color: #009688;
-            
-                                & ~ svg{
-                                    color: #009688;
-                                }
-                            }
-                        }
-                    }
-                    .active{
-                        border-bottom-color: #009688 !important;
-                        & ~ svg{
-                            color: #009688 !important;
-                        }
-                    }
-                    svg {
-                        position: absolute;
-                        top: 35%;
-                        left: 0;
-                        transform: translateY(-50%);
-                        color: #999;
-                        font-size: 1.5rem;
-                        transition: all 0.2s ease;
-                    }
-                    .button-submit{
-                        border: none;
-                        background-color: #009688;
-                        padding: 0.5rem 1rem;
-                        border-radius: 5px;
-                        color: #fff;
-                        margin-left: 1rem;
-                    }
-                }
-            }
-        }
-    }
-    .active-search{
-        top: 3% !important;
-    }
-    .close-button-wrapper{
-        position: absolute;
-        top: 2%;
-        left: 92%;
-
-        .close-button{
-            border: none;
-            background: transparent;
-            font-size: 1.7rem;
-        }
-    }
-    .selected-users-wrapper{
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.8rem;
-        margin: 1rem 0;
-    }
-    .user-badge{
-        background-color: #e5ddd5;
-        padding: 5px 10px;
-        border-radius: 5px;
-        display: flex;
-        gap: 0.5rem;
-
-        button{
-            border: none;
-            background: transparent;
-            text-align: center;
-            font-size: 1rem;
-            width: 1rem;
-            height: 1rem;
-        }
-    }
-`;
 
 export default UpdateGroupChat;

@@ -8,7 +8,6 @@ module.exports.getMessages = async (req, res, next) => {
       .populate("sender", "username profilePic email")
       .populate("chat");
     res.json(messages);
-    console.log(messages);
   } catch (error) {
     res.status(400);
     throw new Error(error.message);
@@ -43,7 +42,6 @@ module.exports.addMessage = async (req, res, next) => {
 
     message = await message.populate({ path: 'chat', populate: { path: 'latestMessage' } });
 
-    console.log(message.chat)
     res.json(message);
   } catch (error) {
     res.status(400);

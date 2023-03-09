@@ -107,6 +107,7 @@ const Container = styled.div`
         align-items: center;
         background-color: transparent;
         border: none;
+        color: #111;
     }
     
     .user-details {
@@ -121,13 +122,15 @@ const Container = styled.div`
         }
       .username {
         h3 {
-          color: #000;
+          color: #111;
+          font-weight: 500;
         }
       }
     }
     .chat-menu{
       &__button{
         cursor: pointer;
+        
       }
     }
     .chat-menu-toggle{
