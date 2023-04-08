@@ -1,0 +1,136 @@
+.auth{
+    position: relative;
+    min-width: $base * 86;
+    width: 100%;
+    overflow: hidden;
+    background: $white;
+    border-radius: $base * 2;
+    box-shadow: 0 $base $base * 2 rgba(0, 0, 0, 0.1);
+    margin: 0 $base * 4;
+  
+    .form-container{
+        display: flex;
+        width: 200%;
+        transition: height 0.2s ease;
+    
+        .form {
+            width: $border_round;
+            padding: $base * 6;
+            background-color: $white;
+            transition: margin-left 0.18s ease;
+        
+            .title {
+                position: relative;
+                font-size: $gap_md * 1.7;
+                font-weight: 600;
+        
+                &::before{
+                    position: absolute;
+                    content: '';
+                    left: 0;
+                    bottom: 0;
+                    height: calc($base * 3 / 5);
+                    width: $base * 6;
+                    background-color: $main_color;
+                    border-radius: $base * 5;
+                }
+            }
+        
+            .input-field{
+                position: relative;
+                height: $base * 10;
+                width: 100%;
+                margin-top: $base * 6;
+        
+                input{
+                    @include no_bd_no_bg;
+                    position: absolute;
+                    height: 100%;
+                    width: 100%;
+                    padding: 0 $base * 7;
+                    outline: none;
+                    font-size: $gap_md;
+                    border-bottom: calc($base / 2.5) solid #ccc;
+                    transition: all 0.2s ease;
+            
+                    &[type="file"]{
+                        color: #747474;
+                        padding-top: 4%;
+                        border-bottom-color: #ccc;
+            
+                        &::-webkit-file-upload-button{
+                            display: none;
+                        }
+                        &:focus{
+                            border-bottom-color: $main_color;
+                        }
+                        & ~ svg{
+                            color: #999;
+                        }
+                    }
+        
+                    &:focus{
+                        border-bottom-color: $main_color;
+        
+                        & ~ svg{
+                            color: $main_color;
+                        }
+                    }
+                    &:not(:placeholder-shown) {
+                        &:not([type="file" i]){
+                            border-bottom-color: $main_color;
+                            & ~ svg{
+                                color: $main_color;
+                            }
+                        }
+                    }
+                }
+                .active {
+                    border-bottom-color: $main_color !important;
+                    & ~ svg{
+                        color: $main_color !important;
+                    }
+                }
+                svg {
+                    position: absolute;
+                    top: $border_round;
+                    left: 0;
+                    font-size: $base * 4.6;
+                    color: #999;
+                    transform: translateY(-$border_round);
+                    transition: all 0.2s ease;
+                }
+        
+                .password-icon {
+                    left: 90%;
+                }
+        
+                .none {
+                    display: none;
+                }
+            }
+        
+            .text {
+                color: #333;
+                font-size: $base * 2.8;
+        
+                .login-link {
+                    cursor: pointer;
+                    font-size: $base * 2.8;
+                    border: none;
+                    background-color: transparent;
+                    color: $main_color;
+                    
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+            }
+        
+            .login-signup {
+                margin-top: $base * 6;
+                text-align: center;
+            }
+        }
+    }
+}

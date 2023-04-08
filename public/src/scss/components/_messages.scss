@@ -1,0 +1,176 @@
+.messages-container{
+    display: grid;
+    grid-template-rows: 90% 10%;
+    overflow: hidden;
+
+    @media screen and (min-width: 720px) and (max-width: 1080px) {
+      grid-template-rows: 89% 11%;
+    }
+
+    p {
+      color: $text_main_color;
+    }
+  
+    .chat-messages {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: $base;
+        overflow: auto;
+        padding: $gap_md;
+        flex: 70%;
+        /* background: url("assets/pattern.png"); */
+        background-color: $gray_color;
+        background-size: 30% 100%;
+        background-repeat: repeat;
+    
+        &::-webkit-scrollbar {
+            width: $base;
+            color: $button_color;
+    
+            &-thumb {
+                background-color: $white;
+                width: $base;
+                border-radius: $gap_md;
+                color: $button_color;
+            }
+        }
+  
+        .message {
+            position: relative;
+                
+            .content {
+                max-width: 60%;
+                min-height: 40px;
+                overflow-wrap: break-word;
+                padding: $gap_sm $gap_sm 0 $gap_sm;
+                font-size: $gap_md * 0.9;
+                border-radius: $gap_sm;
+                background: $white;
+                line-height: 1.6;
+    
+                @media screen and (min-width: 720px) and (max-width: 1080px) {
+                    max-width: 70%;
+                }
+
+                .text{
+                    padding-right: 35px;
+                }
+
+                .triangle::before {
+                    content: "";
+                    position: absolute;
+                    width: $base * 3;
+                    height: $base * 3;
+                    background: linear-gradient(
+                        225deg,
+                        $white 0%,
+                        $white $border_round,
+                        transparent $border_round,
+                        transparent
+                    );
+                }
+                img{
+                    max-width: $base * 40;
+                    margin-right: $base;
+                }
+                    .time{
+                    min-width: $base * 6;
+                    font-size: $gap_md * 0.7;
+                    opacity: 0.4;
+                    display: block;
+                    text-align: end;
+                }
+            }
+
+        }
+        .sended {
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+            margin-right: $gap_lg;
+    
+            .content{
+                background: $secondary_color;
+                
+                .triangle::before {
+                    top: 0;
+                    right: -1.1%;
+                    background: linear-gradient(
+                        135deg,
+                        $secondary_color 0%,
+                        $secondary_color $border_round,
+                        transparent $border_round,
+                        transparent
+                    );
+                
+                }
+            }
+        }
+        .recieved{
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            gap: $gap_sm;
+            margin-left: $gap_lg;
+            .content {
+                padding-left: $base * 2.5;
+                .triangle::before{
+                    top: 11%;
+                    left: 0;
+                    background: linear-gradient(
+                        225deg,
+                        $white 0%,
+                        $white $border_round,
+                        transparent $border_round,
+                        transparent
+                    );
+                }
+            }
+        }
+
+        .recieved-group {
+            gap: $gap_md * 1.2;
+
+            .sender-pic, .sender-pic img{
+                width: $gap_md * 1.5;
+                height: $gap_md * 1.5;
+            }
+            .sender-pic{
+                img{
+                    border-radius: $border_round;
+                }
+            }
+            .content {
+                .text-group{
+                    padding-right: 35px;
+                }
+                .sender-username{
+                    font-weight: 550;
+                    span{
+                        color: $text_main_color;
+                    }
+                }
+                .text{
+                    padding-right: 0;
+                }
+                .triangle::before{
+                    top: calc($gap_md / 2.5);
+                    left: $gap_md * 2.1;
+                    background: linear-gradient(
+                        225deg,
+                        $white 0%,
+                        $white $border_round,
+                        transparent $border_round,
+                        transparent
+                    );
+                }
+            }
+        }
+        .margin-top{
+            .content {
+                margin-top: calc($gap_md / 2.5);
+            }
+        }
+    }
+}

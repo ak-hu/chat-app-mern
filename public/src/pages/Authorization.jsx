@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Login from '../components/Authorization/Login';
 import Register from '../components/Authorization/Register';
 
-export default function Authorization() {
+function Authorization() {
   const navigate = useNavigate();
   const [isLoginActive, setIsLoginActive] = useState('yes');
 
@@ -28,3 +28,5 @@ export default function Authorization() {
     </>
   );
 }
+
+export default Authorization;

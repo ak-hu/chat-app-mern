@@ -1,0 +1,14 @@
+.welcome{
+    @include flex_center_center;
+    color: $text_main_color;
+    flex-direction: column;
+    background-color: $gray_color;
+  
+    img {
+      height: $gap_lg * 10;
+    }
+    
+    span {
+      color: $main_color;
+    }
+}

@@ -2,25 +2,105 @@ import { useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { RxExit, RxPencil2 } from "react-icons/rx";
 import { GoKebabVertical } from "react-icons/go";
-import styled from "styled-components";
 
 import { ChatState } from "../context/ChatProvider";
 import { getSender, getSenderProfilePic } from "../config/ChatLogics";
 
 import UpdateGroupChat from "./Group/UpdateGroupChat";
-import LeaveChat from "./Group/LeaveChat";
+import SubmitModal from "./Aux/SubmitModal";
 import SingleChat from "./SingleChat";
 
-export default function ChatContainer({ socket, fetchAgain, setFetchAgain }) {
+import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
+import { removeGroupChatRoute, deleteChatRoute } from "../utils/APIRoutes";
+
+function ChatContainer({ socket, fetchAgain, setFetchAgain }) {
   const { setSelectedChat, selectedChat, user } = ChatState();
   const [showToggle, setShowToggle] = useState(false);
   const [modalUpdateActive, setModalUpdateActive] = useState('not');
+  //submit modal
   const [modalSubmitActive, setModalSubmitActive] = useState('not');
+  const [warnText, setWarnText] = useState("");
+  const [submText, setSubmText] = useState("");
+
+  //styles for toast notification
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 800,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "dark",
+  };
+
+  const updateChat = () => {
+    setModalUpdateActive("active");
+    setShowToggle(!showToggle);
+  };
+
+  const leaveChat = () => {
+    setModalSubmitActive("leave");
+    setShowToggle(!showToggle);
+    setWarnText("You cannot return this chat by yourself.");
+    setSubmText(`Are you sure you want to leave ${selectedChat.chatName}?`);
+  };
+
+  const handleLeave = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      await axios.put(
+        `${removeGroupChatRoute}`,
+        {
+          chatId: selectedChat._id, userId: user._id,
+        }, 
+        config
+      );
+      setFetchAgain(!fetchAgain);
+      toast.success(`You succefuly leaved ${selectedChat.chatName}`, toastOptions);
+      setSelectedChat();
+      setModalSubmitActive("not");
+    } catch (error) {
+      toast.error("Something went wrong! Please, try again", toastOptions);
+    }
+  };
+
+  const deleteChat = () => {
+    setModalSubmitActive("delete");
+    setShowToggle(!showToggle);
+    setWarnText("You cannot restore this chat. All messages will be permanently deleted.");
+    setSubmText(`Are you sure you want to delete chat with ${selectedChat.chatName}?`);
+  };
+
+  const handleDelete = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      await axios.put(
+        `${deleteChatRoute}`,
+        {
+          chatId: selectedChat._id,
+        },
+        config
+      );
+      setFetchAgain(!fetchAgain);
+      toast.success(`You succefuly deleted the chat`, toastOptions);
+      setSelectedChat();
+      setModalSubmitActive('not');
+    } catch (error) {
+      toast.error("Something went wrong! Please, try again", toastOptions);
+    }
+  };
 
   return (
-    <Container >
+    <div className="right-side" >
       <div className="chat-header">
-        <button className="chat-header__button" onClick={() => { setSelectedChat(undefined) }}>
+        <button className="icon-button" onClick={() => { setSelectedChat(undefined) }}>
           <IoIosArrowBack />
         </button>
         {selectedChat && (
@@ -43,30 +123,28 @@ export default function ChatContainer({ socket, fetchAgain, setFetchAgain }) {
           </div>
         )}
         <div className="chat-menu">
-          <button className="chat-header__button" onClick={() => { setShowToggle(!showToggle) }}>
+          <button className={`icon-button ${showToggle ? 'transform' : ''} `} onClick={() => { setShowToggle(!showToggle) }}>
             <GoKebabVertical />
           </button>
         </div>
 
         {selectedChat.isGroupChat ? (
           <div className={`${showToggle ? 'chat-menu-toggle ' : 'none'}`}>
-            <button className="list-item" onClick={() => { { setModalUpdateActive("active") } { setShowToggle(!showToggle) } }}>
+            <button className="list-item" onClick={updateChat}>
               <RxPencil2 />
               <span>Update</span>
             </button>
-            <button className="list-item" onClick={() => { { setModalSubmitActive("active") } { setShowToggle(!showToggle) } }}>
+            <button className="list-item" onClick={leaveChat}>
               <RxExit />
               <span>Leave Group</span>
             </button>
           </div>
         ) : (
           <div className={`${showToggle ? 'chat-menu-toggle ' : 'none'}`}>
-            <div className="list-item">
-              <button className="list-item" onClick={() => { { setModalSubmitActive("active") } { setShowToggle(!showToggle) } }}>
-                <RxExit />
-                <span>Delete Chat</span>
-              </button>
-            </div>
+            <button className="list-item" onClick={deleteChat}>
+              <RxExit />
+              <span>Delete Chat</span>
+            </button>
           </div>
         )}
       </div>
@@ -76,103 +154,26 @@ export default function ChatContainer({ socket, fetchAgain, setFetchAgain }) {
         ? <UpdateGroupChat fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} setModalActive={setModalUpdateActive} />
         : <></>
       }
-      {modalSubmitActive === "active"
-        ? <LeaveChat fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} setModalActive={setModalSubmitActive} />
+      {modalSubmitActive === "leave"
+        ? <SubmitModal
+          setModalActive={setModalSubmitActive}
+          warnText={warnText}
+          submText={submText}
+          handleFunction={handleLeave}
+        />
         : <></>
       }
-    </Container >
+      {modalSubmitActive === "delete"
+        ? <SubmitModal
+          setModalActive={setModalSubmitActive}
+          warnText={warnText}
+          submText={submText}
+          handleFunction={handleDelete}
+        />
+        : <></>
+      }
+    </div >
   );
 }
 
-const Container = styled.div`
-  position: relative;
-  display: grid;
-  grid-template-rows: 10% 90%;
-  overflow: hidden;
-
-
-  .chat-header {
-    background: #ededed;
-    display: grid;
-    grid-template-columns: 5% 88% 7%;
-    gap: 0.5rem;
-    align-items: center;
-    padding: 0.5rem 0;
-    transition: all 1s ease;
-
-    &__button{
-      font-size: 1.5rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: transparent;
-        border: none;
-        color: #111;
-    }
-    
-    .user-details {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-
-        img {
-          border-radius: 100%;
-          height: 3rem;
-          width: 3rem;
-        }
-      .username {
-        h3 {
-          color: #111;
-          font-weight: 500;
-        }
-      }
-    }
-    .chat-menu{
-      &__button{
-        cursor: pointer;
-        
-      }
-    }
-    .chat-menu-toggle{
-      position: absolute;
-      top: 9%;
-      left: 82%;
-      background: #fff;
-      min-width: 150px;
-      min-height: 20px;
-      z-index: 2;
-      padding: 10px 0;
-      border-radius: 5px;
-      cursor: pointer;
-
-      .list-item{
-        padding: 10px;
-        transition: all 0.3s ease;
-        border: none;
-        background-color: transparent;
-        width: 100%;
-        display: flex;
-        align-items: center;
-
-        &:hover{
-          background-color: #f5f5f5;
-        }
-        &:first-child{
-          svg{
-            font-size: 1.05rem;
-          }
-        }
-
-        svg{
-          margin-right: 1rem;
-          font-size: 1rem;
-          color: #51585c;
-        }
-        span{
-          color: #51585c;
-          font-size: 14px;
-        }
-      }
-    }
-  }
-`;
+export default ChatContainer;

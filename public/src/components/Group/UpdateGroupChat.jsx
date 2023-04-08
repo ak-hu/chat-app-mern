@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { GrFormClose } from "react-icons/gr";
 import { BsPencil } from "react-icons/bs";
+import { BsPencilFill } from "react-icons/bs";
 import { AiOutlineUserAdd } from "react-icons/ai";
-import { MdOutlineAddAPhoto } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 
 import axios from "axios";
@@ -15,18 +15,18 @@ import {
     addGroupChatRoute,
     removeGroupChatRoute
 } from "../../utils/APIRoutes";
-import UserListItem from "../UserListItem";
-import UserBage from "./UserBage";
+import UserListItem from "../Aux/UserListItem";
+import UserBage from "../Aux/UserBage";
 
 const UpdateGroupChat = ({ fetchAgain, setFetchAgain, setModalActive }) => {
     const [groupChatName, setGroupChatName] = useState();
-    const [newGroupPic, setGroupPic] = useState("");
     const [search, setSearch] = useState("");
     const [searchResult, setSearchResult] = useState([]);
     const [loading, setLoading] = useState(false);
     const [renameloading, setRenameLoading] = useState(false);
-    const [isActive, setIsActive] = useState('not-active');
-    const [activeSearch, setActiveSearch] = useState(false)
+    const [activeSearch, setActiveSearch] = useState(false);
+
+    const [showChatNameInput, setShowChatNameInput] = useState(false)
 
     const { selectedChat, setSelectedChat, user } = ChatState();
 
@@ -39,47 +39,29 @@ const UpdateGroupChat = ({ fetchAgain, setFetchAgain, setModalActive }) => {
         theme: "dark",
     };
 
-    const getImage = (event) => {
-        setGroupPic({ ...newGroupPic, groupPic: event.target.files[0] })
-    }
-
-    const imageUpload = async () => {
-        setIsActive('active');
-        console.log(newGroupPic)
-
+    const imageUpload = async (event) => {
+        event.preventDefault();
+        const groupPic = event.target.files[0];
+        const formData = new FormData();
+        const config = {
+            headers: {
+                Authorization: `Bearer ${user.token}`,
+            },
+        };
         try {
-            console.log(newGroupPic)
-            const groupPic = newGroupPic.groupPic;
-            const formData = new FormData();
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${user.token}`,
-                },
-            };
             formData.append("chatId", selectedChat._id);
-            if (groupPic) {
-                formData.append("groupPic", groupPic, groupPic.name);
-            };
-            const { data } = await axios.put(
-                `${updateGroupPicChatRoute}`, formData,
-                config
-            );
-
+            if (groupPic) formData.append("groupPic", groupPic, groupPic.name);
+            const { data } = await axios.put(`${updateGroupPicChatRoute}`, formData, config);
             setSelectedChat(data);
-            console.log(data);
             setFetchAgain(!fetchAgain);
         } catch (error) {
             toast.error(error.response.data.message, toastOptions);
         }
-        setGroupPic("");
     };
-
 
     const handleSearch = async (query) => {
         setSearch(query);
-        if (!query) {
-            return;
-        }
+        if (!query) return
         try {
             setActiveSearch(true);
             setLoading(true);
@@ -100,24 +82,17 @@ const UpdateGroupChat = ({ fetchAgain, setFetchAgain, setModalActive }) => {
     };
 
     const handleRename = async () => {
+        setShowChatNameInput(false);
         if (!groupChatName) return;
-
         try {
+            setShowChatNameInput(!showChatNameInput)
             setRenameLoading(true);
             const config = {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },
             };
-            const { data } = await axios.put(
-                `${renameGroupChatRoute}`,
-                {
-                    chatId: selectedChat._id,
-                    chatName: groupChatName,
-                },
-                config
-            );
-
+            const { data } = await axios.put(`${renameGroupChatRoute}`, {chatId: selectedChat._id, chatName: groupChatName}, config);
             setSelectedChat(data);
             setFetchAgain(!fetchAgain);
             setRenameLoading(false);
@@ -133,12 +108,10 @@ const UpdateGroupChat = ({ fetchAgain, setFetchAgain, setModalActive }) => {
             toast.error("User Already in group!", toastOptions);
             return;
         }
-
         if (selectedChat.groupAdmin._id !== user._id) {
             toast.error("Only admins can add new users", toastOptions);
             return;
         }
-
         try {
             setLoading(true);
             const config = {
@@ -154,7 +127,6 @@ const UpdateGroupChat = ({ fetchAgain, setFetchAgain, setModalActive }) => {
                 },
                 config
             );
-
             setSelectedChat(data);
             setFetchAgain(!fetchAgain);
             setLoading(false);
@@ -172,23 +144,10 @@ const UpdateGroupChat = ({ fetchAgain, setFetchAgain, setModalActive }) => {
             toast.error("Only admins can remove users from group chat", toastOptions);
             return;
         }
-
         try {
             setLoading(true);
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${user.token}`,
-                },
-            };
-            const { data } = await axios.put(
-                `${removeGroupChatRoute}`,
-                {
-                    chatId: selectedChat._id,
-                    userId: user1._id,
-                },
-                config
-            );
-
+            const config = {headers: { Authorization: `Bearer ${user.token}`}};
+            const { data } = await axios.put(`${removeGroupChatRoute}`,{ chatId: selectedChat._id, userId: user1._id}, config);
             user1._id === user._id ? setSelectedChat() : setSelectedChat(data);
             setFetchAgain(!fetchAgain);
             setLoading(false);
@@ -210,11 +169,36 @@ const UpdateGroupChat = ({ fetchAgain, setFetchAgain, setModalActive }) => {
                     </div>
                     <div className='modal-header'>
                         <div className="avatar">
-                            <img src={process.env.REACT_APP_PROFILE_PICS_PATHS + selectedChat.groupPic}
-                                alt={selectedChat.chatName}
-                            />
+                            <label>
+                                <input
+                                    type="file"
+                                    name="groupPic"
+                                    accept="image/*"
+                                    onChange={(event) => imageUpload(event)}
+                                />
+                                <img src={process.env.REACT_APP_PROFILE_PICS_PATHS + selectedChat.groupPic}
+                                    alt={selectedChat.chatName}
+                                />
+                                <div className="hover-text">Update chat picture</div>
+                            </label>
                         </div>
-                        <h2>{selectedChat.chatName}</h2>
+                        <div className="center">
+                            {showChatNameInput
+                                ? (<div className='modal-input'>
+                                        <input
+                                            placeholder={selectedChat.chatName}
+                                            value={groupChatName}
+                                            onChange={(e) => setGroupChatName(e.target.value)}
+                                        />
+                                        <BsPencil />
+                                        <button className="button-submit" onClick={handleRename}>Save</button>
+                                    </div>)
+                                : (<>
+                                    <h2>{selectedChat.chatName}</h2>
+                                    <BsPencilFill onClick={() => { setShowChatNameInput(true) }} />
+                                </>)
+                            }
+                        </div>
                     </div>
                     <div className="modal-content" >
                         <div className='selected-users-wrapper'>
@@ -230,27 +214,7 @@ const UpdateGroupChat = ({ fetchAgain, setFetchAgain, setModalActive }) => {
                         <div className="inputs">
                             <div className='modal-input'>
                                 <input
-                                    placeholder="Enter new chat name"
-                                    value={groupChatName}
-                                    onChange={(e) => setGroupChatName(e.target.value)}
-                                />
-                                <BsPencil />
-                                <button className="button-submit" onClick={handleRename}>Update</button>
-                            </div>
-                            <div className="modal-input">
-                                <input
-                                    type="file"
-                                    name="groupPic"
-                                    accept="image/*"
-                                    className={`${isActive === 'active' ? 'active' : ''}`}
-                                    onChange={(event) => getImage(event)}
-                                />
-                                <MdOutlineAddAPhoto />
-                                <button className="button-submit" onClick={imageUpload}>Upload</button>
-                            </div>
-                            <div className='modal-input'>
-                                <input
-                                    placeholder="Add User to group"
+                                    placeholder="Add new user"
                                     onChange={(e) => handleSearch(e.target.value)}
                                 />
                                 <AiOutlineUserAdd />

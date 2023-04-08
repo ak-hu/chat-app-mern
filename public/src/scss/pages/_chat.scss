@@ -1,0 +1,109 @@
+.chat-container{
+    @include flex_center_center;
+    flex-direction: column;
+    overflow: hidden;
+    background: $white;
+    box-shadow: 0 calc($base / 5) calc($base / 5) rgba(0, 0, 0, 0.06), 0 calc($base / 2.5) $base 0 rgba(0, 0, 0, 0.06);
+
+    .container {
+        position: relative;
+        display: grid;
+        grid-template-columns: 30% 70%;
+        width: 100vw;
+        height: 100vh;
+        background: $white;
+        
+        @media screen and (min-width: 720px) and (max-width: 1080px) {
+            grid-template-columns: 35% 65%;
+        }
+    }
+  
+    .aside {
+        display: grid;
+        grid-template-rows: 10% 90%;
+        overflow: auto;
+        background: $white;
+        border-right: calc($base / 5) solid rgba(0, 0, 0, 0.1);
+
+        .wrapper{
+            display: grid;
+            grid-template-rows: 10% 90%;
+
+            &::after{
+                position: absolute;
+                content: '';
+                top: 10%;
+                left: 29.95%;
+                height: 90%;
+                width: calc($base / 5);
+                background-color: $secondary_color;
+    
+                @media screen and (min-width: 720px) and (max-width: 1080px) {
+                    left: 34.9%;
+                }
+            }
+        }
+
+        .search__chat {
+            @include flex_center_center;
+            position: relative;
+            width: 100%;
+            height: $base * 13;
+            padding: 0 $gap_md;
+            border-bottom: calc($base / 5) solid $gray_color;
+
+            button{
+                @include no_bd_no_bg;
+                position: absolute;
+                display: inherit;
+                top: $gap_md * 1.3;
+                left: $base * 7;
+                font-size: $gap_md * 1.2;
+                color: $text_color;
+                cursor: pointer;
+            }
+            
+            .right-button{
+                top: $gap_md * 1.3;
+                left: 85%;
+                cursor: pointer;
+
+                svg{
+                    font-size: $gap_md * 1.4 !important;
+                    path {
+                        stroke: $text_color;
+                    }
+                }
+            }
+
+            input {
+                width: 100%;
+                outline: none;
+                border: none;
+                background: $selection_color;
+                padding: $base ;
+                height: $base * 8;
+                border-radius: $base * 5;
+                font-size: $base * 2.8;
+                padding-left: $base * 10;
+                
+                &::placeholder {
+                    color: $text_color;
+                }
+            }
+        }
+    }
+
+    .contacts-wrapper{
+        overflow-y: scroll;
+        overflow-x: hidden;
+        
+        &::-webkit-scrollbar {
+            &-thumb {
+                background-color: rgba(0, 0, 0, 0.2);
+                width: calc($gap_md / 10);
+                border-radius: $gap_md;
+            }
+        }
+    }
+}

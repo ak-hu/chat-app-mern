@@ -1,0 +1,83 @@
+.update-group{
+    .modal-container{
+        @include grid_center_center;
+        left: 32%;
+        top: 14%;
+        grid-template-rows: 35% 65% !important;
+        gap: $gap_md;
+
+        .modal-header{
+            @include flex_center_center;
+            width: $base * 90;
+            gap: $gap_md; 
+
+            .avatar {
+                @include img_lg;
+
+                .hover-text {
+                    display: none;
+                }
+
+                label{
+                    @include img_lg;
+                    position: absolute;
+                    cursor: pointer;
+
+                    &:hover .hover-text{
+                        @include img_lg;
+                        @include flex_center_center;
+                        position: relative;
+                        top: -105%;
+                        text-align: center;
+                        background-color: $button_color;
+                        color: $white;
+                        opacity: 0.8;
+                        padding: $base;
+                    }
+                }
+
+                img {
+                    @include img_lg;
+                    position: relative;
+                }
+
+                input{
+                    display: none;
+                }
+            }
+        }
+        .modal-content{
+            @include flex_center;
+            flex-direction: column;
+            padding: 0 $gap_md;
+            height: auto;
+            
+            .inputs{
+                margin-bottom: $gap_lg;
+                padding: 0 $gap_md;
+        
+                .modal-input{
+                    @include flex_center;
+                    height: $base * 8;
+
+                    input{
+                        width: 70%;
+                    }
+
+                    svg {
+                        position: absolute;
+                        top: 40%;
+                        left: 0;
+                        transform: translateY(-$border_round);
+                        color: #999;
+                        font-size: $gap_md * 1.5;
+                        transition: all 0.2s ease;
+                    }
+                }
+            }
+        }
+        .active-search{
+            top: 3% !important;
+        }
+    }
+}

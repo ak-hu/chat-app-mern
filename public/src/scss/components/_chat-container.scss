@@ -1,0 +1,41 @@
+.right-side{
+    position: relative;
+    display: grid;
+    grid-template-rows: 10% 90%;
+    overflow: hidden;
+
+    .chat-header {
+        display: grid;
+        align-items: center;
+        grid-template-columns: 5% 88% 7%;
+        gap: $gap_sm;
+        background: $main_color;
+        padding: $gap_sm 0;
+        transition: all 1s ease;
+        
+        .user-details {
+            @include flex_center;
+            gap: $gap_md;
+
+            img {
+                @include img_md;
+            }
+            .username {
+                h3 {
+                    color: $white;
+                    font-weight: 500;
+                }
+            }
+        }
+        .chat-menu{
+            .transform{
+                transform: translateY(0) rotate(90deg);
+                transition: transform 0.8s ease-in;
+            }
+        }
+        .chat-menu-toggle{
+            left: 82%;
+        }
+
+    }
+}

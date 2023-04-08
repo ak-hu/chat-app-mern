@@ -1,0 +1,40 @@
+.create-group{
+    .modal-container{
+        left: 30%;
+        top: 20%; 
+        min-height: $base * 60; 
+        align-items: center; 
+
+        .modal-header{
+            text-align: center;
+        }
+        .modal-content{
+            
+            .inputs{
+                @include flex_center;
+                flex-direction: column;
+                padding: 0 $gap_md;
+
+                .contacts{
+                    .contact{
+                        &::after{
+                            visibility: hidden;
+                        }
+                    }
+                }
+            }
+            .button-submit{
+                text-align: center;
+
+                .button{
+                    margin-top: $gap_md;
+                    padding: $gap_sm 0;
+                    width: $border_round;
+                }
+            }
+        }
+    }
+    .active-search{
+        top: 8% !important;
+    }
+}

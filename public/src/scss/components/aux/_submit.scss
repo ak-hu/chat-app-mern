@@ -1,0 +1,43 @@
+.submit{
+    .modal-container{
+        left: 35%;
+        top: 25%;
+        display: flex !important;
+        flex-direction: column;
+        justify-content: space-between !important;
+        align-items: center;
+        gap: $gap_lg;
+        min-height: $base * 46;
+        max-height: $base * 50;
+        background: $white;
+
+        .text{
+            @include flex_center;
+            flex-direction: column;
+            gap: $gap_md;
+            height: auto;
+            padding: 0 $gap_md;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .buttons{
+            display: flex;
+            gap: $gap_md;
+            width: $base * 90;
+
+            .button{
+                width: $border_round;
+                padding: $gap_sm 0;
+                margin: 0;
+            }
+
+            .secondary{
+                color: $button_color;
+                border: calc($base / 2.5) solid $button_color;
+                background-color: transparent;
+            }
+        }
+
+    }
+}

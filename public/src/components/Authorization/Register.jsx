@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
-import styled from "styled-components";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { RxPerson, RxEyeOpen, RxEyeClosed } from "react-icons/rx";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { FiMail, FiLock, FiUnlock } from "react-icons/fi";
@@ -9,7 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { registerRoute } from "../../utils/APIRoutes";
 
-function Register({isLoginActive}) {
+function Register({ isLoginActive }) {
   const navigate = useNavigate();
   const [show, setShow] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
@@ -66,7 +65,7 @@ function Register({isLoginActive}) {
     } //if password is shorter than 6 characters
     else if (password.length < 6) {
       toast.error(
-        "Password should be equal or greater than 8 characters.",
+        "Password should be greater than 6 characters.",
         toastOptions
       );
       return false;
@@ -82,120 +81,112 @@ function Register({isLoginActive}) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (handleValidation()) {
-      const { username, email, password, profilePic } = values;
-
-      const formData = new FormData();
-      formData.append("username", username);
-      formData.append("email", email);
-      formData.append("password", password);
-      if (profilePic) {
-        formData.append("profilePic", profilePic, profilePic.name);
+      try {
+        const { username, email, password, profilePic } = values;
+        const formData = new FormData();
+        formData.append("username", username);
+        formData.append("email", email);
+        formData.append("password", password);
+        if (profilePic) {
+          formData.append("profilePic", profilePic, profilePic.name);
+        };
+        const { data } = await axios.post(registerRoute, formData);
+        if (data.status === false) {
+          toast.error(data.msg, toastOptions);
+        }
+        if (data.status === true) {
+          localStorage.setItem(
+            process.env.REACT_APP_LOCALHOST_KEY,
+            JSON.stringify(data.user)
+          );
+          navigate("/");
+        }
+      } catch (error) {
+        toast.error(error.response.data.msg, toastOptions);
       };
-
-      const { data } = await axios.post(registerRoute, formData);
-
-      //throwing the error
-      if (data.status === false) {
-        toast.error(data.msg, toastOptions);
-      }
-      //setting the user into localstorage
-      if (data.status === true) {
-        localStorage.setItem(
-          process.env.REACT_APP_LOCALHOST_KEY,
-          JSON.stringify(data.user)
-        );
-        navigate("/");
-      }
     }
   };
 
   return (
     <>
-      <FormContainer className="form-container">
-          <form className="form signup" onSubmit={(event) => handleSubmit(event)}>
-            <span className="title">Registration</span>
-            <div className="input-field">
-              <input
-                type="text"
-                placeholder="Enter your name"
-                name="username"
-                onChange={(e) => handleChange(e)}
-              />
-              <RxPerson />
-            </div>
-            <div className="input-field">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                name="email"
-                onChange={(e) => handleChange(e)}
-              />
-              <FiMail />
-            </div>
-            <div className="input-field">
-              <input
-                type={`${show ? "text" : "password"}`}
-                placeholder="Password"
-                name="password"
-                onChange={(e) => handleChange(e)}
-              />
-              <FiUnlock />
-              <RxEyeOpen 
-              className={`${show ? "password-icon" : "none"}`}
-              onClick={()=>{setShow(false)}}
-              />
-              <RxEyeClosed 
-              className={`${!show ? "password-icon" : "none"}`}
-              onClick={()=>{setShow(true)}}
-              />
-            </div>
-            <div className="input-field">
-              <input
-                type={`${showConfirm ? "text" : "password"}`}
-                placeholder="Confirm Password"
-                name="confirmPassword"
-                onChange={(e) => handleChange(e)}
-              />
-              <FiLock />
-              <RxEyeOpen 
-              className={`${showConfirm ? "password-icon" : "none"}`}
-              onClick={()=>{setShowConfirm(false)}}
-              />
-              <RxEyeClosed 
-              className={`${showConfirm ? "none" : "password-icon"}`}
-              onClick={()=>{setShowConfirm(true)}}
-              />
-            </div>
-            <div className="input-field ">
-            
+      <div className="resiter-wrapper form-container">
+        <form className="form signup" onSubmit={(event) => handleSubmit(event)}>
+          <span className="title">Registration</span>
+          <div className="input-field">
             <input
-                type="file"
-                name="profilePic"
-                accept="image/*"
-                className={`${isActive === 'active' ? 'active' : ''}`}
-                onChange={(e) => imageUpload(e)}
-              />
-              <MdOutlineAddAPhoto />
-              
-            </div>
-            <div>
-              <button type="submit" className="input-field button">Create User</button>
-            </div>
-            <div className="login-signup">
-              <span className="text">
-                Already have an account ? <button onClick={() => isLoginActive('yes')} className="login-link">Login Now</button>
-              </span>
-            </div>
-          </form>
-      </FormContainer>
+              type="text"
+              placeholder="Enter your name"
+              name="username"
+              onChange={(e) => handleChange(e)}
+            />
+            <RxPerson />
+          </div>
+          <div className="input-field">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              name="email"
+              onChange={(e) => handleChange(e)}
+            />
+            <FiMail />
+          </div>
+          <div className="input-field">
+            <input
+              type={`${show ? "text" : "password"}`}
+              placeholder="Password"
+              name="password"
+              onChange={(e) => handleChange(e)}
+            />
+            <FiUnlock />
+            <RxEyeOpen
+              className={`${show ? "password-icon" : "none"}`}
+              onClick={() => { setShow(false) }}
+            />
+            <RxEyeClosed
+              className={`${!show ? "password-icon" : "none"}`}
+              onClick={() => { setShow(true) }}
+            />
+          </div>
+          <div className="input-field">
+            <input
+              type={`${showConfirm ? "text" : "password"}`}
+              placeholder="Confirm Password"
+              name="confirmPassword"
+              onChange={(e) => handleChange(e)}
+            />
+            <FiLock />
+            <RxEyeOpen
+              className={`${showConfirm ? "password-icon" : "none"}`}
+              onClick={() => { setShowConfirm(false) }}
+            />
+            <RxEyeClosed
+              className={`${showConfirm ? "none" : "password-icon"}`}
+              onClick={() => { setShowConfirm(true) }}
+            />
+          </div>
+          <div className="input-field ">
+            <input
+              type="file"
+              name="profilePic"
+              accept="image/*"
+              className={`${isActive === 'active' ? 'active' : ''}`}
+              onChange={(e) => imageUpload(e)}
+            />
+            <MdOutlineAddAPhoto />
+          </div>
+          <div>
+            <button type="submit" className="input-field button">Create User</button>
+          </div>
+          <div className="login-signup">
+            <span className="text">
+              Already have an account ? <button onClick={() => isLoginActive('yes')} className="login-link">Login Now</button>
+            </span>
+          </div>
+        </form>
+      </div>
       <ToastContainer />
     </>
   );
 }
-
-//declaring FormContainer as a div and setting styles
-const FormContainer = styled.div`
-align-items: center;
-`;
 
 export default Register;

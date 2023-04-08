@@ -18,19 +18,15 @@ import Search from "../components/Search";
 import UserInfo from "../components/UserInfo";
 
 
-export default function Chat() {
+function Chat() {
   const socket = useRef();
-  const [navState, setNavState] = useState("start");
-
+  const [loading, setLoading] = useState(false);
   const [fetchAgain, setFetchAgain] = useState(false);
   const [searchResults, setSearchResult] = useState([]);
   const [search, setSearch] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [navState, setNavState] = useState("start");
 
-  const {
-    selectedChat,
-    user,
-  } = ChatState();
+  const { selectedChat, user } = ChatState();
 
   //styles for error notification
   const toastOptions = {
@@ -43,7 +39,7 @@ export default function Chat() {
   // search function
   const handleSearch = async (event) => {
     event.preventDefault();
-    if (search === '') {
+    if (!search) {
       toast.error("Please Enter something in search", toastOptions);
       return;
     }
@@ -54,18 +50,17 @@ export default function Chat() {
           Authorization: `Bearer ${user.token}`,
         },
       };
-
       const getUsers = async () => {
         const { data } = await axios.get(`${allUsersRoute}?search=${search}`, config);
         setLoading(false);
         setSearchResult(data);
       };
       getUsers();
-      setNavState('add-trip')
+      setNavState('add-trip');
     } catch (error) {
+      setLoading(true);
       toast.error("Error in searching user", toastOptions);
     }
-
   };
 
   //socket connection
@@ -80,49 +75,52 @@ export default function Chat() {
     <>
       <div className="chat-container">
         {user &&
-          <div className={`container chat-box`}>
+          <div className="container chat-box">
             <div className="aside">
-              <UserInfo fetchAgain={fetchAgain} setFetchAgain={setFetchAgain}/>
-              
+              <UserInfo fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
               <div className="wrapper">
                 <form className="search__chat" onSubmit={(event) => handleSearch(event)}>
-                  {navState === 'start' &&
-                    (<button type="submit" className="search__button"><SlMagnifier /></button>
-                    )}
-
-                  {navState === 'add-trip' && (
-                    <button className="back" onClick={() => { setNavState('start') }}><IoIosArrowBack /></button>
-                  )}
-                  <input type="text" placeholder="Search or start new chat"
+                  {navState === 'add-trip' && search
+                    ? <button className="back" onClick={() => { setNavState('start') }}><IoIosArrowBack /></button>
+                    : <button type="submit" className="search__button"><SlMagnifier /></button>
+                  }
+                  <input type="text"
+                    placeholder="Search or start new chat"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                   />
-                  {search !== ''
-                    ? <button className="right-button" onClick={() => { setSearch("") }}><GrFormClose /></button>
-                    : <></>}
+                  {search &&
+                    <button className="right-button" onClick={() => { setSearch("") }}><GrFormClose /></button>
+                  }
                 </form>
-                <div className="contacts-container">
-                  {search === "" || navState === 'start' ? (
-                    <div>
-                      <Contacts socket={socket} selectedChat={selectedChat} fetchAgain={fetchAgain}  />
+                <div className="contacts-wrapper">
+                  {!search || navState === 'start'
+                    ? <div>
+                      <Contacts socket={socket} selectedChat={selectedChat} fetchAgain={fetchAgain} />
                     </div>
-                  ) : (
-                    <Search socket={socket} searchResults={searchResults}  />
-                  )}
+                    : (loading
+                      ? (
+                        <div className="spinner-container chat-loading">
+                          <div className="loading-spinner">
+                          </div>
+                        </div>
+                      )
+                      : (<Search socket={socket} searchResults={searchResults} />)
+                    )
+                  }
                 </div>
               </div>
             </div>
-            {selectedChat === undefined ? (
-              <Welcome />
-            ) : (
-              <ChatContainer socket={socket} fetchAgain={fetchAgain}  setFetchAgain={setFetchAgain} />
-            )}
-
+            {selectedChat
+              ? <ChatContainer socket={socket} fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
+              : <Welcome />
+            }
           </div>
         }
-
       </div>
       <ToastContainer />
     </>
   );
-}
+};
+
+export default Chat;

@@ -1,0 +1,54 @@
+.user-info{
+    @include flex_center;
+    gap: $gap_lg;
+    padding: 0 $gap_md;
+    background-color: $main_color;
+
+    &::after{
+        position: absolute;
+        content: '';
+        top: 0;
+        left: 29.95%;
+        height: 10%;
+        background-color: $selection_color;
+        width: calc($base / 5);
+
+        @media screen and (min-width: 720px) and (max-width: 1080px) {
+            left: 34.9%;
+        }
+    }
+
+    .user-data {
+        @include flex_center;
+        gap: $gap_md;
+
+        img {
+            border-radius: $border_round;
+            height: $gap_md * 2.5;
+            width: $gap_md * 2.5;
+        }
+
+        .icon-button{
+            cursor: auto;
+        }
+
+        .tooltiptext{
+            top: 25%;
+            left: 180%;
+            
+            &::after {
+                top: 26%;
+                left: -5%; 
+                border-color: transparent $button_color transparent transparent;
+            }
+        }
+    }
+
+    .buttons {
+        margin-left: $gap_lg * 5.8;
+
+        @media screen and (min-width: 720px) and (max-width: 1080px) {
+            margin-left: $gap_lg * 5;
+        }
+    }
+}

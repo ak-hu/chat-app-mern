@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
@@ -6,10 +6,9 @@ import { ToastContainer, toast } from "react-toastify";
 import { RxPerson, RxEyeOpen, RxEyeClosed } from "react-icons/rx";
 import { FiLock } from "react-icons/fi";
 import axios from "axios";
-import styled from "styled-components";
 import { loginRoute } from "../../utils/APIRoutes";
 
-function Login({isActive}) {
+function Login({ isActive }) {
   const navigate = useNavigate();
 
   //creating useState hook and setting empty values into it
@@ -34,7 +33,6 @@ function Login({isActive}) {
   //checking if the entered data exists in the database
   const validateForm = () => {
     const { username, password } = values;
-
     //checking if usernames match
     if (username === "") {
       toast.error("Username or Password is incorrect", toastOptions);
@@ -61,9 +59,6 @@ function Login({isActive}) {
           username,
           password,
         }, config);
-
-        console.log(JSON.stringify(data));
-
         if (data.status === false) {
           toast.error(data.msg, toastOptions);
         }
@@ -82,9 +77,10 @@ function Login({isActive}) {
 
   return (
     <>
-      <FormContainer className="form-container">
-          <form className="form login" action="" onSubmit={(event) => handleSubmit(event)}>
-            <span className="title">Login</span>
+      <div className="login-wrapper form-container">
+        <form className="form login" action="" onSubmit={(event) => handleSubmit(event)}>
+          <span className="title">Login</span>
+          <div className="inputs">
             <div className="input-field">
               <input
                 type="text"
@@ -112,23 +108,20 @@ function Login({isActive}) {
                 onClick={() => { setShow(true) }}
               />
             </div>
-            <div>
-              <button type="submit" className="input-field button">Log In</button>
-            </div>
-            <div className="login-signup">
-              <span className="text">
-                Don't have an account ? <button onClick={() => isActive('no')} className="login-link">Create One</button>
-              </span>
-            </div>
-          </form>
-      </FormContainer>
+          </div>
+          <div>
+            <button type="submit" className="input-field button">Log In</button>
+          </div>
+          <div className="login-signup">
+            <span className="text">
+              Don't have an account ? <button onClick={() => isActive('no')} className="login-link">Create One</button>
+            </span>
+          </div>
+        </form>
+      </div>
       <ToastContainer />
     </>
   );
 }
-
-const FormContainer = styled.div`
-flex-direction: column;
-`;
 
 export default Login;

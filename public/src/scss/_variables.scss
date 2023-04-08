@@ -1,18 +1,23 @@
-$main_color: #009688;
-$secondary_color: #d9dbd5;
+$main_color: #B1454A;
+$secondary_color: #FFF0DE;
+$selection_color: #f7ecec;
+$gray_color: #E5E5E5;
 $gradient: linear-gradient(
-    #009688 0%,
-    #009688 130px,
-    #d9dbd5 130px,
-    #d9dbd5 100%
+    $main_color 0%,
+    $main_color 130px,
+    $secondary_color 130px,
+    $secondary_color 100%
   );
 $white: #fff;
 
-$text_main_color: #111;
-$text_secondary_color: #51585c;
-$text_color: #f5f5f5;
+$button_color: #1F1E31;
+$text_main_color: #121212;
+$text_secondary_color: #333333;
+$text_color: #888888;
 
 
+$recieved_message_color: #B4703D;
+$sended_message_color: #586e4c;
 
 $border_round: 50%;
 

@@ -1,0 +1,16 @@
+.user-badge-item{
+    background-color: $gray_color;
+    padding: $base $base * 2;
+    border-radius: $base;
+    display: flex;
+    gap: $gap_sm;
+
+    button{
+        @include no_bd_no_bg;
+        text-align: center;
+        font-size: $gap_md;
+        width: $gap_md;
+        height: $gap_md;
+        cursor: pointer;
+    }
+}

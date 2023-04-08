@@ -1,23 +1,14 @@
-import { useState, useEffect } from "react";
 import Robot from "../assets/robot.gif";
+import { ChatState } from "../context/ChatProvider";
 
 function Welcome() {
-  const [userName, setUserName] = useState("");
+  const { user } = ChatState();
 
-  useEffect(() => {
-    const getUserName = async () => {
-      setUserName(
-        await JSON.parse(
-          localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
-        ).username
-      );
-    }; getUserName();
-  }, []);
   return (
     <div className="welcome">
       <img src={Robot} alt="Robot waves his palm" />
       <h1>
-        Welcome, <span>{userName}!</span>
+        Welcome, <span>{user.username}!</span>
       </h1>
       <h3>Select a chat to start messaging.</h3>
     </div>

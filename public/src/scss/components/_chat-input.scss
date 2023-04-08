@@ -1,0 +1,132 @@
+.chat-input{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    background-color: $selection_color;
+    padding: 0 $gap_lg;
+    border-top: calc($base / 1.5) solid $gray_color;
+
+    @media screen and (min-width: 720px) and (max-width: 1080px) {
+      padding: 0 $gap_md;
+      gap: $gap_md;
+    }
+    .button-container {
+        display: flex;
+        gap: $gap_md;
+  
+        .emoji {
+            position: relative;
+
+            svg {
+                font-size: $gap_md * 1.6;
+                color: $button_color;
+                cursor: pointer;
+            }
+            .emoji-picker-react {
+                position: absolute;
+                top: -$gap_lg * 10;
+                background-color: $secondary_color;
+                box-shadow: 0 $base $base * 2 rgba(0, 0, 0, 0.06), 0 calc($base / 2.5) $base 0 rgba(0, 0, 0, 0.06);
+                border-color: rgba(0, 0, 0, 0.2);
+    
+                .emoji-scroll-wrapper::-webkit-scrollbar {
+                    background-color: $secondary_color;
+                    width: $base;
+
+                    &-thumb {
+                        background-color: rgba(0, 0, 0, 0.2);
+                    }
+                }
+                .emoji-categories {
+                    button {
+                        filter: contrast(0);
+                    }
+                }
+                .emoji-search {
+                    background-color: transparent;
+                    border-color: rgba(0, 0, 0, 0.2);
+                }
+                .emoji-group:before {
+                    background-color: $secondary_color;
+                }
+            }
+        }
+    }
+    .input-container {
+        @include flex_center;
+        width: 100%;
+        gap: $gap_lg;
+
+        input {
+            width: 80%;
+            height: 100%;
+            border: none;
+            background-color: $white;
+            padding: $base * 2 $gap_md;
+            border-radius: $base;
+            color: $text_main_color;
+            font-size: $gap_md;
+            cursor: text;
+
+            &::placeholder{
+                font-size: 14px;
+                padding-left: calc($base / 2.5);
+            }
+    
+            &::selection {
+                background-color: $main_color;
+            }
+            &:focus {
+                outline: none;
+            }
+        }
+
+        .buttons{
+            @include flex_center;
+            gap: $gap_lg;
+        }
+        .icon-button {
+            color: $button_color;
+        }
+        .submit-button {
+            border: none;
+
+            @media screen and (min-width: 720px) and (max-width: 1080px) {
+                padding: $gap_md * 0.3 $gap_md;
+
+                svg {
+                    font-size: $gap_md;
+                }
+            }
+            svg {
+                font-size: $gap_md * 1.7;
+            }
+        }
+    }
+    .attachment{
+        height: 100px;
+        position: relative;
+
+        .close-button-wrapper{
+            top: 0;
+            background-color: #00000076 !important;;
+            left: 83%;
+            padding: 0;
+
+            .close-button{
+                font-size: $gap_md;
+                cursor: pointer;
+
+                svg{
+                    path {
+                        stroke: $white;
+                    }
+                }
+            }
+        }
+    }
+    .attach-file{
+        height: 100px;
+        max-width: 90px;
+    }
+}
