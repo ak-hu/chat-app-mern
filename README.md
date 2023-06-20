@@ -1,4 +1,4 @@
-# chat-app-mern
+# Advanced Chat Application
 
 Chat App MERN is a real-time chat application built using the MERN stack. It provides users with a seamless and interactive chatting experience.
 
