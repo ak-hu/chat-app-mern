@@ -43,6 +43,14 @@ To use the Chat App MERN, follow these steps:
 5. Start the development server: `npm start`
 6. Access the application in your web browser at `http://localhost:3000`.
 
+## Screenshots
+
+<b align="center">Chat Page</b>
+
+![Chat](screenshots/chat_page.png)
+
+*Chat page with Contacts, SingleChat and ChatInput components*
+
 ## Contributing
 
 Contributions to the Chat App MERN project are welcome! If you have any ideas for improvements, bug fixes, or new features, feel free to open an issue or submit a pull request.
