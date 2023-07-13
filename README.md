@@ -45,11 +45,37 @@ To use the Chat App MERN, follow these steps:
 
 ## Screenshots
 
-<b align="center">Chat Page</b>
+<h1 align="center">Login Page</h1>
+
+![Login](screenshots/login_page_login.png)
+
+*Login page with Login components*
+
+![Register](screenshots/login_page_register.png)
+
+*Login page with Register components*
+
+<h1 align="center">Chat Page</h1>
 
 ![Chat](screenshots/chat_page.png)
 
 *Chat page with Contacts, SingleChat and ChatInput components*
+
+![UpdateProfile](screenshots/chat_page_update_profile.png)
+
+*Chat page with UpdateProfile component*
+
+![GroupchatCreate](screenshots/chat_page_groupchat_create.png)
+
+*Chat page with GroupchatCreate component*
+
+![GroupchatUpdate](screenshots/chat_page_group_update.png)
+
+*Chat page with GroupchatUpdate component*
+
+![SubmitModal](screenshots/chat_page_confirmation.png)
+
+*Chat page with SubmitModal component*
 
 ## Contributing
 
