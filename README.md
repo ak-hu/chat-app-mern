@@ -45,7 +45,7 @@ To use the Chat App MERN, follow these steps:
 
 ## Screenshots
 
-<h1 align="center">Login Page</h1>
+<h3 align="center">Login Page</h3>
 
 ![Login](screenshots/login_page_login.png)
 
@@ -55,7 +55,7 @@ To use the Chat App MERN, follow these steps:
 
 *Login page with Register components*
 
-<h1 align="center">Chat Page</h1>
+<h3 align="center">Chat Page</h3>
 
 ![Chat](screenshots/chat_page.png)
 
