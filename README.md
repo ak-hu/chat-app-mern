@@ -49,11 +49,11 @@ To use the Chat App MERN, follow these steps:
 
 ![Login](screenshots/login_page_login.png)
 
-*Login page with Login components*
+*Login page with Login component*
 
 ![Register](screenshots/login_page_register.png)
 
-*Login page with Register components*
+*Login page with Register component*
 
 <h3 align="center">Chat Page</h3>
 
