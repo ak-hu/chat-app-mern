@@ -44,10 +44,8 @@ function Register({ isLoginActive }) {
     setIsActive('active');
   };
 
-  //validation for incoming data
   const handleValidation = () => {
     const { password, confirmPassword, username, email } = values;
-    //if passwords doesn't match
     if (password !== confirmPassword) {
       //throwing an error
       toast.error(
