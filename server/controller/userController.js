@@ -7,7 +7,7 @@ const path = require('path');
 const fs = require('fs');
 const { promisify } = require('util');
 const unlinkAsync = promisify(fs.unlink);
-const generateToken = require('../config/generateToken');
+const { generateToken } = require('../config/generateToken');
 
 module.exports.register = async (req, res, next) => {
     try {
