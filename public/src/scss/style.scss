@@ -176,7 +176,7 @@ body {
 .modal-active{
   width: 100vw;
   height: 100vh;
-  background-color: #00000076 !important;
+  background-color: $modal_bg !important;
 }
 
 .none{
