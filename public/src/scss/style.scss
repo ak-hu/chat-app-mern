@@ -56,7 +56,6 @@ body {
     border: 5px solid $selection_color; /* Light grey */
     border-top: 5px solid $main_color;
     will-change: transform;
-    // border-right: 5px solid $main_color; /* Black */
     border-radius: 50%;
     animation: spinner 1s linear infinite;
   
