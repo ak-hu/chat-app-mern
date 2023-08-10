@@ -51,12 +51,12 @@ body {
     }
 }
   .loading-spinner {
-    width: 50px;
-    height: 50px;
-    border: 5px solid $selection_color;
-    border-top: 5px solid $main_color;
+    width: $base * 10;
+    height: $base * 10;
+    border: $base solid $selection_color;
+    border-top: $base solid $main_color;
     will-change: transform;
-    border-radius: 50%;
+    border-radius: $border_round;
     animation: spinner 1s linear infinite;
   
 }
