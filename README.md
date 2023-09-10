@@ -1,6 +1,6 @@
 # Advanced Chat Application
 
-Chat Application is a real-time application built using the MERN stack. It provides users with a seamless and interactive chatting experience.
+It is a real-time application built using the MERN stack. It provides users with a seamless and interactive chatting experience.
 
 ## Features
 
