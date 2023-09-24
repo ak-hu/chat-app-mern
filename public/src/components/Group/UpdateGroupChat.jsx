@@ -15,6 +15,7 @@ import {
     addGroupChatRoute,
     removeGroupChatRoute
 } from "../../utils/APIRoutes";
+import { toastOptions } from "../utils/constants";
 import UserListItem from "../Aux/UserListItem";
 import UserBage from "../Aux/UserBage";
 
@@ -25,19 +26,9 @@ const UpdateGroupChat = ({ fetchAgain, setFetchAgain, setModalActive }) => {
     const [loading, setLoading] = useState(false);
     const [renameloading, setRenameLoading] = useState(false);
     const [activeSearch, setActiveSearch] = useState(false);
-
-    const [showChatNameInput, setShowChatNameInput] = useState(false)
+    const [showChatNameInput, setShowChatNameInput] = useState(false);
 
     const { selectedChat, setSelectedChat, user } = ChatState();
-
-    //styles for toast notification
-    const toastOptions = {
-        position: "bottom-right",
-        autoClose: 8000,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "dark",
-    };
 
     const imageUpload = async (event) => {
         event.preventDefault();

@@ -7,21 +7,13 @@ import { FiMail, FiLock, FiUnlock } from "react-icons/fi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { registerRoute } from "../../utils/APIRoutes";
+import { toastOptions } from "../utils/constants";
 
 function Register({ isLoginActive }) {
   const navigate = useNavigate();
   const [show, setShow] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
   const [isActive, setIsActive] = useState('not-active');
-
-  //styles for error notification
-  const toastOptions = {
-    position: "bottom-right",
-    autoClose: 8000,
-    pauseOnHover: true,
-    draggable: true,
-    theme: "dark",
-  };
 
   //creating useState hook and setting empty values into it
   const [values, setValues] = useState({

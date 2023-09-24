@@ -7,23 +7,12 @@ import { RxPerson, RxEyeOpen, RxEyeClosed } from "react-icons/rx";
 import { FiLock } from "react-icons/fi";
 import axios from "axios";
 import { loginRoute } from "../../utils/APIRoutes";
+import { toastOptions } from "../utils/constants";
 
 function Login({ isActive }) {
   const navigate = useNavigate();
-
-  //creating useState hook and setting empty values into it
   const [values, setValues] = useState({ username: "", password: "" });
   const [show, setShow] = useState(false);
-
-  //styles for error notification
-  const toastOptions = {
-    position: "bottom-right",
-    autoClose: 8000,
-    pauseOnHover: true,
-    draggable: true,
-    theme: "dark",
-  };
-
 
   //setting values of inputs
   const handleChange = (event) => {

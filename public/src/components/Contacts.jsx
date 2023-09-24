@@ -3,6 +3,7 @@ import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { ChatState } from "../context/ChatProvider";
 import { fetchChatsRoute } from "../utils/APIRoutes";
+import { toastOptions } from "../utils/constants";
 import { getSender, getSenderProfilePic } from "../config/ChatLogics";
 import GroupChatCreate from "./Group/CreateGroupChat";
 
@@ -10,15 +11,6 @@ function Contacts({ fetchAgain, selectedChat, socket }) {
   const { setSelectedChat, chats, user, setChats } = ChatState();
   const [loading, setLoading] = useState(false);
   const [modalActive, setModalActive] = useState('not');
-
-  //styles for error notification
-  const toastOptions = {
-    position: "bottom-right",
-    autoClose: 8000,
-    pauseOnHover: true,
-    draggable: true,
-    theme: "dark",
-  };
 
   const fetchChats = async () => {
     try {

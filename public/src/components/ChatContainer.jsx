@@ -13,6 +13,7 @@ import SingleChat from "./SingleChat";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { removeGroupChatRoute, deleteChatRoute } from "../utils/APIRoutes";
+import { toastOptions } from "../utils/constants";
 
 function ChatContainer({ socket, fetchAgain, setFetchAgain }) {
   const { setSelectedChat, selectedChat, user } = ChatState();
@@ -22,15 +23,6 @@ function ChatContainer({ socket, fetchAgain, setFetchAgain }) {
   const [modalSubmitActive, setModalSubmitActive] = useState('not');
   const [warnText, setWarnText] = useState("");
   const [submText, setSubmText] = useState("");
-
-  //styles for toast notification
-  const toastOptions = {
-    position: "bottom-right",
-    autoClose: 800,
-    pauseOnHover: true,
-    draggable: true,
-    theme: "dark",
-  };
 
   const updateChat = () => {
     setModalUpdateActive("active");

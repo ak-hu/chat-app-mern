@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { ChatState } from "../context/ChatProvider";
 import { recieveMessageRoute, sendMessageRoute } from "../utils/APIRoutes";
+import { toastOptions } from "../utils/constants";
 import {
     isGroupRecieved,
     isAnotherSender,
@@ -22,15 +23,6 @@ function SingleChat({ fetchAgain, socket, setFetchAgain, selectedChat }) {
     const [loading, setLoading] = useState(false);
     const scrollRef = useRef();
     const { user } = ChatState();
-
-    //styles for error notification
-    const toastOptions = {
-        position: "bottom-right",
-        autoClose: 8000,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "dark",
-    };
 
     const sendMessage = async (msg) => {
         setLoading(true);

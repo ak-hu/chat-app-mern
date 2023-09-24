@@ -8,6 +8,7 @@ import axios from "axios";
 
 import { ChatState } from "../../context/ChatProvider";
 import { groupChatRoute, allUsersRoute } from "../../utils/APIRoutes";
+import { toastOptions } from "../utils/constants";
 
 import UserListItem from "../Aux/UserListItem"
 import UserBage from "../Aux/UserBage";
@@ -20,15 +21,6 @@ function GroupChatCreate({ setModalActive }) {
     const [loading, setLoading] = useState(false);
     const [activeSearch, setActiveSearch] = useState(false)
     const { user, chats, setChats } = ChatState();
-
-    //styles for toast notification
-    const toastOptions = {
-        position: "bottom-right",
-        autoClose: 8000,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "dark",
-    };
 
     const handleGroup = (userToAdd) => {
         if (selectedUsers.includes(userToAdd)) {

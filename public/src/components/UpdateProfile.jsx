@@ -14,6 +14,7 @@ import {
     profilePicUpdateRoute,
     passwordUpdateRoute
 } from "../utils/APIRoutes";
+import { toastOptions } from "../utils/constants";
 
 
 function UpdateProfile({ fetchAgain, setFetchAgain, setModalActive, handleDelete }) {
@@ -32,15 +33,6 @@ function UpdateProfile({ fetchAgain, setFetchAgain, setModalActive, handleDelete
     const [showOld, setShowOld] = useState(false);
     const [show, setShow] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
-
-    //styles for error notification
-    const toastOptions = {
-        position: "bottom-right",
-        autoClose: 8000,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "dark",
-    };
 
     const handleLocalStorage = (data) => {
         if (data.status === true) {

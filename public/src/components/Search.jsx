@@ -2,6 +2,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { accessChatRoute } from "../utils/APIRoutes";
+import { toastOptions } from "../utils/constants";
 import { ChatState } from "../context/ChatProvider";
 import UserListItem from "./Aux/UserListItem";
 
@@ -12,15 +13,6 @@ function Search({ searchResults }) {
     chats,
     setChats,
   } = ChatState();
-
-  //styles for error notification
-  const toastOptions = {
-    position: "bottom-right",
-    autoClose: 8000,
-    pauseOnHover: true,
-    draggable: true,
-    theme: "dark",
-  };
 
   const accessChat = async (userId) => {
     try {

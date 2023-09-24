@@ -7,6 +7,7 @@ import axios from "axios";
 
 import { ChatState } from "../context/ChatProvider";
 import { deleteUserRoute } from "../utils/APIRoutes";
+import { toastOptions } from "../utils/constants";
 import UpdateProfile from "./UpdateProfile";
 import SubmitModal from "./Aux/SubmitModal";
 
@@ -19,15 +20,6 @@ function UserInfo({ fetchAgain, setFetchAgain }) {
     const [deleteActive, setDeleteActive] = useState("not");
     const [warnText, setWarnText] = useState("");
     const [submText, setSubmText] = useState("");
-
-    //styles for toast notification
-    const toastOptions = {
-        position: "bottom-right",
-        autoClose: 8000,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "dark",
-    };
 
     const handleLogout = async () => {
         localStorage.clear();
