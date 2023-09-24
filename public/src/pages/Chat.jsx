@@ -10,6 +10,7 @@ import axios from "axios";
 
 import { ChatState } from "../context/ChatProvider";
 import { allUsersRoute, host } from "../utils/APIRoutes";
+import { toastOptions } from "../utils/constants";
 
 import ChatContainer from "../components/ChatContainer";
 import Contacts from "../components/Contacts";
@@ -28,14 +29,6 @@ function Chat() {
 
   const { selectedChat, user } = ChatState();
 
-  //styles for error notification
-  const toastOptions = {
-    position: "bottom-right",
-    autoClose: 8000,
-    pauseOnHover: true,
-    draggable: true,
-    theme: "dark",
-  };
   // search function
   const handleSearch = async (event) => {
     event.preventDefault();
