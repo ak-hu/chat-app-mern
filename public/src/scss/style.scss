@@ -9,10 +9,8 @@
 
 @import './components/aux/submit';
 @import './components/aux/user-bage';
-
 @import './components/user/info';
 @import './components/user/update';
-
 @import './components/welcome';
 @import './components/contacts';
 @import './components/update-group';
@@ -23,7 +21,7 @@
 
 
 .Toastify__toast-theme--dark {
-    background-color: #00000076 !important;
+    background-color: $modal_bg !important;
 }
 
 * {
@@ -82,7 +80,7 @@ body {
             position: relative;
             top: -105%;
             text-align: center;
-            background-color: #333;
+            background-color: $text_secondary_color;
             color: $white;
             opacity: 0.7;
         }
@@ -128,7 +126,7 @@ body {
             outline: none;
             padding: 0 $base * 7;
             font-size: $gap_md;
-            border-bottom: calc($base / 2.5) solid #ccc;
+            border-bottom: calc($base / 2.5) solid $border_color_light;
             transition: all 0.2s ease;
 
             &:focus{
@@ -151,7 +149,7 @@ body {
             top: 35%;
             left: 5%;
             transform: translateY(-$border_round);
-            color: #999;
+            color: $text_color;
             font-size: $gap_md * 1.5;
             transition: all 0.2s ease;
         }
@@ -332,14 +330,14 @@ body {
                         padding: 0 $base * 7;
                         outline: none;
                         font-size: $gap_md;
-                        border-bottom: calc($base / 2.5) solid #ccc;
+                        border-bottom: calc($base / 2.5) solid $border_color_light;
                         transition: all 0.2s ease;
             
                         &[type="file"]{
                             height: 90%;
-                            color: #747474;
+                            color: $text_color;
                             padding-top: 1.5%;
-                            border-bottom-color: #ccc;
+                            border-bottom-color: $border_color_light;
             
                             &::-webkit-file-upload-button{
                                 display:none;
@@ -348,7 +346,7 @@ body {
                                 border-bottom-color: $main_color;
                             }
                             & ~ svg{
-                                color: #999;
+                                color: $text_color;
                             }
                         }
 
@@ -379,7 +377,7 @@ body {
                         top: 35%;
                         left: 0;
                         font-size: $base * 4.6;
-                        color: #999;
+                        color: $text_color;
                         transform: translateY(-$border_round);
                         transition: all 0.2s ease;
                     }
@@ -407,7 +405,7 @@ body {
         display: flex;
         gap: $gap_sm;
         padding: $base $base * 2;
-        background-color: #e5ddd5;
+        background-color: $gray_color;
         border-radius: $base;
 
         button{
