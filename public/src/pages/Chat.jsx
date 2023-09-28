@@ -14,9 +14,10 @@ import { toastOptions } from "../utils/constants";
 
 import ChatContainer from "../components/ChatContainer";
 import Contacts from "../components/Contacts";
-import Welcome from "../components/Welcome";
 import Search from "../components/Search";
 import UserInfo from "../components/UserInfo";
+
+import Robot from "../assets/robot.gif";
 
 
 function Chat() {
@@ -106,7 +107,13 @@ function Chat() {
             </div>
             {selectedChat
               ? <ChatContainer socket={socket} fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
-              : <Welcome />
+              : (<div className="welcome">
+                <img src={Robot} alt="Robot waves his palm" />
+                <h1>
+                  Welcome, <span>{user.username}!</span>
+                </h1>
+                <h3>Select a chat to start messaging.</h3>
+              </div>)
             }
           </div>
         }
