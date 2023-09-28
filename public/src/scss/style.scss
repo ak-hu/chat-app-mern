@@ -49,8 +49,8 @@ body {
     }
 }
   .loading-spinner {
-    width: $base * 10;
-    height: $base * 10;
+    width: calc($base * 10);
+    height: calc($base * 10);
     border: $base solid $selection_color;
     border-top: $base solid $main_color;
     will-change: transform;
@@ -62,8 +62,8 @@ body {
 .hidden-input,
 .hidden-input label,
 .hidden-input label:hover .hover-text{
-    height: $base * 6;
-    width: $base * 6;
+    height: calc($base * 6);
+    width: calc($base * 6);
 }
 
 .hidden-input {
@@ -87,15 +87,15 @@ body {
     }
 
     svg {
-        height: $base * 5;
-        width: $base * 5;
+        height: calc($base * 5);
+        width: calc($base * 5);
         position: relative;
     }
 }
 
 .chat-loading{
     @include flex_center_center;
-    height: $gap_lg * 15;
+    height: calc($gap_lg * 15);
 }
 
 .form-container{
@@ -112,7 +112,7 @@ body {
     .modal-input{
         position: relative;
         margin-top: $gap_lg;
-        height: $base * 8;
+        height: calc($base * 8);
         text-align: center;
 
         & + .modal-input{
@@ -124,7 +124,7 @@ body {
             height: 90%;
             width: 60%;
             outline: none;
-            padding: 0 $base * 7;
+            padding: 0 calc($base * 7);
             font-size: $gap_md;
             border-bottom: calc($base / 2.5) solid $border_color_light;
             transition: all 0.2s ease;
@@ -150,7 +150,7 @@ body {
             left: 5%;
             transform: translateY(-$border_round);
             color: $text_color;
-            font-size: $gap_md * 1.5;
+            font-size: calc($gap_md * 1.5);
             transition: all 0.2s ease;
         }
 
@@ -176,14 +176,14 @@ body {
   background-color: $modal_bg !important;
 }
 
-.none{
+.none {
   display: none;
 }
 
 .button{
     cursor: pointer;
     width: 100%;
-    margin-top: $base * 7;
+    margin-top: calc($base * 7);
     font-size: $gap_md;
     font-weight: 500;
     letter-spacing: calc($base / 5);
@@ -242,11 +242,11 @@ body {
     position: absolute;
     display: inline-block;    
     top: 9%;
-    min-width: $base * 30;
-    min-height: $base * 4;
+    min-width: calc($base * 30);
+    min-height: calc($base * 4);
     cursor: pointer;
     z-index: 2;
-    padding: $base * 2 0;
+    padding: calc($base * 2) 0;
     background: $white;
     border-radius: $base;
     transition: display 0.8s ease;
@@ -255,7 +255,7 @@ body {
         @include flex_center;
         @include no_bd_no_bg;
         width: 100%;
-        padding: $base * 2;
+        padding: calc($base * 2);
 
         &:hover{
             background-color: $selection_color;
@@ -267,7 +267,7 @@ body {
         }
         span{
             color: $text_secondary_color;
-            font-size: $base * 2.8;
+            font-size: calc($base * 2.8);
         }
     }
 }
@@ -279,7 +279,7 @@ body {
 
     .close-button{
         @include no_bd_no_bg;
-        font-size: $gap_md * 1.7;
+        font-size: calc($gap_md * 1.7);
     }
 }
 
@@ -297,14 +297,14 @@ body {
         display: grid;
         justify-content: center;
         grid-template-rows: 10% 90%;
-        width: $base * 100;
-        padding: $gap_md * 1.8 $gap_lg;
+        width: calc($base * 100);
+        padding: calc($gap_md * 1.8) $gap_lg;
         background-color: $white;
-        border-radius: $base * 2;
-        box-shadow: 0 $base * 4 $base * 4 rgba(0, 0, 0, 0.1);
+        border-radius: calc($base * 2);
+        box-shadow: 0 calc($base * 4) calc($base * 4) rgba(0, 0, 0, 0.1);
 
         .modal-header{
-            width: $base * 90;
+            width: calc($base * 90);
         }
 
         .modal-content{
@@ -316,7 +316,7 @@ body {
                 .modal-input{
                     position: relative;
                     margin-top: $gap_lg;
-                    height: $base * 8;
+                    height: calc($base * 8);
                     width: 100%;
                     
                     & + .modal-input{
@@ -327,7 +327,7 @@ body {
                         @include no_bd_no_bg;
                         height: 90%;
                         width: 70%;
-                        padding: 0 $base * 7;
+                        padding: 0 calc($base * 7);
                         outline: none;
                         font-size: $gap_md;
                         border-bottom: calc($base / 2.5) solid $border_color_light;
@@ -376,7 +376,7 @@ body {
                         position: absolute;
                         top: 35%;
                         left: 0;
-                        font-size: $base * 4.6;
+                        font-size: calc($base * 4.6);
                         color: $text_color;
                         transform: translateY(-$border_round);
                         transition: all 0.2s ease;
@@ -404,8 +404,8 @@ body {
     .user-badge{
         display: flex;
         gap: $gap_sm;
-        padding: $base $base * 2;
-        background-color: $gray_color;
+        padding: $base calc($base * 2);
+        background-color: $background_color;
         border-radius: $base;
 
         button{
@@ -444,13 +444,13 @@ body {
     position: absolute;
     top: 130%;
     left: 0;
-    width: $base * 16;
+    width: calc($base * 16);
     z-index: 1;
     opacity: 0;
-    font-size: $base * 2.4;
+    font-size: calc($base * 2.4);
     text-align: center;
     padding: $base 0;
-    margin-left: -$base * 5.2;
+    margin-left: calc(-$base * 5.2);
     background-color: $button_color;
     color: $white;
     border-radius: $base;
