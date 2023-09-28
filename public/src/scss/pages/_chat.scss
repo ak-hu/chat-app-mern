@@ -50,7 +50,7 @@
             width: 100%;
             height: $base * 13;
             padding: 0 $gap_md;
-            border-bottom: calc($base / 5) solid $gray_color;
+            border-bottom: calc($base / 5) solid $background_color;
 
             button{
                 @include no_bd_no_bg;

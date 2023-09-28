@@ -4,7 +4,7 @@
     flex-wrap: wrap;
     background-color: $selection_color;
     padding: 0 $gap_lg;
-    border-top: calc($base / 1.5) solid $gray_color;
+    border-top: calc($base / 1.5) solid $background_color;
 
     @media screen and (min-width: 720px) and (max-width: 1080px) {
       padding: 0 $gap_md;
