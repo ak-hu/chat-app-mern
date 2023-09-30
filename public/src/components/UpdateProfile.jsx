@@ -135,8 +135,8 @@ function UpdateProfile({ fetchAgain, setFetchAgain, setModalActive, handleDelete
             const { data } = await axios.put(
                 `${passwordUpdateRoute}`, { userId: user._id, oldPassword: oldPassword, newPassword: newPassword }, config
             );
-            if (data.status === true) { toast.success("your password was changed successfully", toastOptions); }
-            else { toast.error("response.data.message", toastOptions); }
+            if (data.status === true) toast.success("your password was changed successfully", toastOptions);
+            else toast.error("response.data.message", toastOptions);
             setFetchAgain(!fetchAgain);
         } catch (error) {
             toast.error(error.response.data.message, toastOptions);
