@@ -18,15 +18,15 @@
             position: relative;
 
             svg {
-                font-size: $gap_md * 1.6;
+                font-size: calc($gap_md * 1.6);
                 color: $button_color;
                 cursor: pointer;
             }
             .emoji-picker-react {
                 position: absolute;
-                top: -$gap_lg * 10;
+                top: calc(-$gap_lg * 10);
                 background-color: $secondary_color;
-                box-shadow: 0 $base $base * 2 rgba(0, 0, 0, 0.06), 0 calc($base / 2.5) $base 0 rgba(0, 0, 0, 0.06);
+                box-shadow: 0 $base calc($base * 2) rgba(0, 0, 0, 0.06), 0 calc($base / 2.5) $base 0 rgba(0, 0, 0, 0.06);
                 border-color: rgba(0, 0, 0, 0.2);
     
                 .emoji-scroll-wrapper::-webkit-scrollbar {
@@ -62,14 +62,14 @@
             height: 100%;
             border: none;
             background-color: $white;
-            padding: $base * 2 $gap_md;
+            padding: calc($base * 2) $gap_md;
             border-radius: $base;
             color: $text_main_color;
             font-size: $gap_md;
             cursor: text;
 
             &::placeholder{
-                font-size: 14px;
+                font-size: calc($gap_md * .8);
                 padding-left: calc($base / 2.5);
             }
     
@@ -92,19 +92,23 @@
             border: none;
 
             @media screen and (min-width: 720px) and (max-width: 1080px) {
-                padding: $gap_md * 0.3 $gap_md;
+                padding: calc($gap_md * .3) $gap_md;
 
                 svg {
                     font-size: $gap_md;
                 }
             }
             svg {
-                font-size: $gap_md * 1.7;
+                font-size: calc($gap_md * 1.7);
             }
         }
     }
-    .attachment{
-        height: 100px;
+    .attachment,
+    .attach-file {
+        height: calc($base * 20);
+    }
+
+    .attachment {
         position: relative;
 
         .close-button-wrapper{
@@ -125,8 +129,7 @@
             }
         }
     }
-    .attach-file{
-        height: 100px;
-        max-width: 90px;
+    .attach-file {
+        max-width: calc($base * 18);
     }
 }
