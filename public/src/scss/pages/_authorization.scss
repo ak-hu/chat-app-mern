@@ -50,13 +50,13 @@
                     padding: 0 $base * 7;
                     outline: none;
                     font-size: $gap_md;
-                    border-bottom: calc($base / 2.5) solid #ccc;
+                    border-bottom: calc($base / 2.5) solid $border_color_light;
                     transition: all 0.2s ease;
             
                     &[type="file"]{
-                        color: #747474;
+                        color: $border_color_light;
                         padding-top: 4%;
-                        border-bottom-color: #ccc;
+                        border-bottom-color: $border_color_light;
             
                         &::-webkit-file-upload-button{
                             display: none;
@@ -65,7 +65,7 @@
                             border-bottom-color: $main_color;
                         }
                         & ~ svg{
-                            color: #999;
+                            color: $text_color;
                         }
                     }
         
@@ -96,7 +96,7 @@
                     top: $border_round;
                     left: 0;
                     font-size: $base * 4.6;
-                    color: #999;
+                    color: $text_color;
                     transform: translateY(-$border_round);
                     transition: all 0.2s ease;
                 }
@@ -111,7 +111,7 @@
             }
         
             .text {
-                color: #333;
+                color: $text_secondary_color;
                 font-size: $base * 2.8;
         
                 .login-link {
